@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ドラム練習カード ジェネレーター</title>
+  <title>ドラム練習トランプ ジェネレーター</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,6 +58,15 @@
       margin-bottom: 15px;
     }
 
+    /* 横並び入力（マークと数字） */
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+    .form-row > div {
+      flex: 1;
+    }
+
     label {
       display: block;
       margin-bottom: 6px;
@@ -104,110 +113,140 @@
     }
 
     /* =========================================
-       カードデザイン (幅354px × 高さ534px)
+       トランプ風デザイン (幅354px × 高さ534px)
        ========================================= */
-    .card {
+    .playing-card {
       width: 354px;
       height: 534px;
       border-radius: 18px;
-      padding: 14px;
+      padding: 14px; /* 白ふちの太さ */
       box-sizing: border-box;
       position: relative;
       flex-shrink: 0;
       transition: all 0.3s ease;
+      background-color: #ffffff;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
     }
 
-    .card-inner {
+    /* 内側の装飾枠 */
+    .playing-card-inner {
       width: 100%;
       height: 100%;
-      border-radius: 8px;
+      border: 2px solid #111;
+      border-radius: 10px;
       position: relative;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+      background-color: #ffffff;
     }
 
-    /* Lv.1 あと少し！（シルバー） */
-    .level-1 {
-      background: linear-gradient(135deg, #e6e6e6, #ffffff, #cccccc);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-    .level-1 .card-inner {
-      background-color: #fcfcfc;
-      background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
-      background-size: 10px 10px;
-      color: #333;
-    }
+    /* --- レベルごとのテーマ切り替え --- */
+    /* Lv.1 あと少し！（ノーマル） */
+    .level-1 { background-color: #ffffff; }
+    .level-1 .playing-card-inner { border-color: #333; }
 
     /* Lv.2 基礎クリア（ゴールド） */
-    .level-2 {
-      background: linear-gradient(135deg, #ffd700, #fff8dc, #daa520);
-      box-shadow: 0 0 18px rgba(218,165,32,0.6);
+    .level-2 { 
+      background-color: #fffdf0; 
+      box-shadow: 0 0 20px rgba(218,165,32,0.4);
     }
-    .level-2 .card-inner {
+    .level-2 .playing-card-inner { 
+      border: 3px solid #daa520; 
       background-color: #fffdf0;
-      background-image: radial-gradient(#f0e68c 1px, transparent 1px);
-      background-size: 10px 10px;
-      color: #4a3b00;
-    }
-
-    /* Lv.3 曲クリア（レジェンド・黒虹） */
-    .level-3 {
-      background: linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
-      box-shadow: 0 0 25px rgba(255,255,255,0.4);
-    }
-    .level-3 .card-inner {
-      background: linear-gradient(to bottom, #2b2b2b, #111111);
-      color: #fff;
-      box-shadow: inset 0 0 15px rgba(255,255,255,0.2);
-    }
-
-    /* ヘッダー */
-    .card-header {
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      z-index: 2;
     }
     
-    .trainer-name {
-      font-size: 13px;
-      font-weight: 800;
-      align-self: flex-start;
-      background: rgba(255,255,255,0.8);
-      padding: 3px 10px;
-      border-radius: 12px;
-      margin-bottom: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      color: #333;
+    /* Lv.3 曲クリア（レジェンド/ダークホロ） */
+    .level-3 { 
+      background: linear-gradient(135deg, #2b2b2b, #111111);
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      color: #fff;
+    }
+    .level-3 .playing-card-inner { 
+      border: 3px solid transparent; 
+      background: linear-gradient(#222, #222) padding-box,
+                  linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff) border-box;
     }
 
-    .pokemon-name {
-      margin: 0;
+    /* トランプのインデックス（左上と右下の数字＆マーク） */
+    .card-index {
+      position: absolute;
+      text-align: center;
+      font-family: 'Times New Roman', serif;
+      font-weight: bold;
+      z-index: 10;
+    }
+    .card-index .rank {
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .card-index .suit {
       font-size: 26px;
+      line-height: 1;
+      margin-top: -2px;
+    }
+    
+    .index-top-left {
+      top: 10px;
+      left: 10px;
+    }
+    .index-bottom-right {
+      bottom: 10px;
+      right: 10px;
+      transform: rotate(180deg);
+    }
+
+    /* スートの色 */
+    .suit-black { color: #111; }
+    .suit-red { color: #d40000; }
+    /* Lv3の時のインデックス色 */
+    .level-3 .suit-black { color: #fff; }
+    .level-3 .suit-red { color: #ff6b6b; }
+
+    /* メインコンテンツ（マークと被らないように左右に余白） */
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 15px 45px; /* 左右45pxでインデックスを避ける */
+      z-index: 5;
+    }
+
+    /* ヘッダー部 */
+    .card-header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      margin: 0;
+      font-size: 20px;
       font-weight: 800;
       letter-spacing: 1px;
     }
-    .level-1 .pokemon-name { text-shadow: 2px 2px 0px #fff; }
-    .level-2 .pokemon-name { text-shadow: 2px 2px 0px #fff, 0 0 10px gold; }
-    .level-3 .pokemon-name { text-shadow: 2px 2px 0px #000, 0 0 10px rgba(255,255,255,0.8); }
+    .trainer-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #666;
+      display: block;
+      margin-top: 2px;
+    }
+    .level-3 .trainer-name { color: #ccc; }
 
-    /* 画像 */
+    /* 画像部 */
     .card-image-area {
+      flex-grow: 1;
       width: 100%;
-      height: 240px;
-      position: relative;
-      z-index: 1;
-      border-top: 3px solid rgba(0,0,0,0.1);
-      border-bottom: 3px solid rgba(0,0,0,0.1);
-      background: #e0e0e0;
+      border: 2px solid #333;
+      border-radius: 6px;
       overflow: hidden;
+      position: relative;
+      background: #e0e0e0;
+      margin-bottom: 15px;
     }
-    .level-3 .card-image-area {
-      border-color: rgba(255,255,255,0.3);
-    }
+    .level-2 .card-image-area { border-color: #daa520; }
+    .level-3 .card-image-area { border-color: rgba(255,255,255,0.4); }
+
     .card-image-area img {
       width: 100%;
       height: 100%;
@@ -217,55 +256,43 @@
       left: 0;
     }
 
-    /* スキル・日付領域 */
+    /* スキル・評価基準部 */
     .card-body {
-      padding: 15px;
-      flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      z-index: 2;
+      justify-content: flex-end;
     }
-
     .skill-area {
-      background: rgba(255, 255, 255, 0.6);
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(0,0,0,0.05);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      text-align: center;
+      margin-bottom: 10px;
     }
-    .level-3 .skill-area {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
+    .level-2 .skill-area { border-color: #daa520; background: rgba(255, 253, 240, 0.9); }
+    .level-3 .skill-area { background: rgba(0, 0, 0, 0.6); border-color: #666; }
 
     .skill-desc {
-      margin: 0;
-      font-size: 19px;
+      margin: 0 0 5px 0;
+      font-size: 16px;
       font-weight: 800;
       line-height: 1.3;
-      text-align: center;
-      margin-bottom: 6px;
     }
-
-    /* 新規追加：評価基準のスタイル */
     .skill-criteria {
       margin: 0;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
-      line-height: 1.4;
-      text-align: left;
-      border-top: 1px dashed rgba(0,0,0,0.2);
-      padding-top: 6px;
       color: #444;
+      border-top: 1px dashed #aaa;
+      padding-top: 6px;
+      line-height: 1.4;
     }
-    .level-3 .skill-criteria {
-      border-top: 1px dashed rgba(255,255,255,0.4);
-      color: #ddd;
-    }
+    .level-3 .skill-criteria { color: #ddd; border-top-color: #666; }
 
     .card-footer {
       text-align: right;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       opacity: 0.8;
     }
@@ -274,29 +301,42 @@
 <body>
 
   <div class="container">
-    <h1>🥁 ドラム練習カードジェネレーター</h1>
+    <h1>ドラム練習トランプ</h1>
 
     <div class="preview-wrapper">
-      <div id="card" class="card level-1">
-        <div class="card-inner">
-          <div class="card-header">
-            <span class="trainer-name" id="disp-name">なまえ</span>
-            <h2 class="pokemon-name" id="disp-pokemon">ポケモンの名前</h2>
-          </div>
+      <div id="card" class="playing-card level-1">
+        <div class="playing-card-inner">
           
-          <div class="card-image-area">
-            <img id="disp-image" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22354%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22354%22%20height%3D%22240%22%20fill%3D%22%23cccccc%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22%23666666%22%20font-family%3D%22sans-serif%22%20dy%3D%22.3em%22%3E画像をアップロードしてね%3C%2Ftext%3E%3C%2Fsvg%3E" alt="アップロード画像">
+          <div class="card-index index-top-left suit-black">
+            <div class="rank">A</div>
+            <div class="suit">♠</div>
           </div>
-          
-          <div class="card-body">
-            <div class="skill-area">
-              <p class="skill-desc" id="disp-skill">8分音符</p>
-              <p class="skill-criteria" id="disp-criteria">テンポのコントロール〇など</p>
+          <div class="card-index index-bottom-right suit-black">
+            <div class="rank">A</div>
+            <div class="suit">♠</div>
+          </div>
+
+          <div class="card-content">
+            <div class="card-header">
+              <h2 class="card-title" id="disp-pokemon">ポケモン名</h2>
+              <span class="trainer-name" id="disp-name">なまえ</span>
             </div>
-            <div class="card-footer">
-              <span id="disp-date">2026/06/07</span>
+            
+            <div class="card-image-area">
+              <img id="disp-image" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22260%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22260%22%20height%3D%22240%22%20fill%3D%22%23cccccc%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-size%3D%2214%22%20text-anchor%3D%22middle%22%20fill%3D%22%23666666%22%20font-family%3D%22sans-serif%22%20dy%3D%22.3em%22%3E写真をアップロード%3C%2Ftext%3E%3C%2Fsvg%3E" alt="アップロード画像">
+            </div>
+            
+            <div class="card-body">
+              <div class="skill-area">
+                <p class="skill-desc" id="disp-skill">8連符のれんしゅう</p>
+                <p class="skill-criteria" id="disp-criteria">テンポをキープしてたたけた！</p>
+              </div>
+              <div class="card-footer">
+                <span id="disp-date">2026/06/07</span>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -305,10 +345,26 @@
       <div class="form-group">
         <label for="input-level">達成レベル</label>
         <select id="input-level">
-          <option value="1">Lv.1 "あと少し！" (シルバー)</option>
+          <option value="1">Lv.1 "あと少し！" (ノーマル)</option>
           <option value="2">Lv.2 "基礎クリア" (ゴールド)</option>
-          <option value="3">Lv.3 "曲クリア" (レジェンド/黒・虹)</option>
+          <option value="3">Lv.3 "曲クリア" (レジェンド)</option>
         </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="input-suit">マーク</label>
+          <select id="input-suit">
+            <option value="spades">♠ スペード</option>
+            <option value="hearts">♥ ハート</option>
+            <option value="diamonds">♦ ダイヤ</option>
+            <option value="clubs">♣ クラブ</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="input-rank">数字 (A, 2〜10, J, Q, K)</label>
+          <input type="text" id="input-rank" value="A" maxlength="2">
+        </div>
       </div>
 
       <div class="form-group">
@@ -322,18 +378,18 @@
       </div>
 
       <div class="form-group">
-        <label for="input-pokemon">ポケモン名 (カード名)</label>
-        <input type="text" id="input-pokemon" placeholder="例: ピカチュウ" value="ポケモンの名前">
+        <label for="input-pokemon">カード名 (曲名やポケモン名)</label>
+        <input type="text" id="input-pokemon" placeholder="例: ピカチュウ" value="ポケモン名">
       </div>
 
       <div class="form-group">
-        <label for="input-skill">練習（達成）項目</label>
-        <input type="text" id="input-skill" placeholder="例: 8分音符" value="8分音符">
+        <label for="input-skill">練習項目</label>
+        <input type="text" id="input-skill" placeholder="例: 8連符クリア！" value="8連符のれんしゅう">
       </div>
 
       <div class="form-group">
         <label for="input-criteria">評価基準（がんばったポイント等）</label>
-        <input type="text" id="input-criteria" placeholder="例: テンポのコントロール〇など" value="テンポのコントロール〇など">
+        <input type="text" id="input-criteria" placeholder="例: テンポをキープしてたたけた！" value="テンポをキープしてたたけた！">
       </div>
 
       <div class="form-group">
@@ -341,7 +397,7 @@
         <input type="date" id="input-date">
       </div>
 
-      <button id="btn-download" class="btn-download">✨ カードを画像として保存 ✨</button>
+      <button id="btn-download" class="btn-download">トランプを画像として保存</button>
     </div>
   </div>
 
@@ -360,21 +416,49 @@
       dateDisp.textContent = `${yyyy}/${mm}/${dd}`;
 
       // テキスト入力のリアルタイム反映処理
-      const bindInput = (inputId, dispId) => {
+      const bindInput = (inputId, dispId, prefix = '') => {
         document.getElementById(inputId).addEventListener('input', (e) => {
-          document.getElementById(dispId).textContent = e.target.value || ' ';
+          document.getElementById(dispId).textContent = e.target.value ? prefix + e.target.value : ' ';
         });
       };
       
-      bindInput('input-name', 'disp-name');
+      // 名前の前には「ドラマー：」をつける
+      bindInput('input-name', 'disp-name', '名前：');
       bindInput('input-pokemon', 'disp-pokemon');
       bindInput('input-skill', 'disp-skill');
-      bindInput('input-criteria', 'disp-criteria'); // 新規追加のバインド
+      bindInput('input-criteria', 'disp-criteria');
 
       // 日付の反映
       dateInput.addEventListener('change', (e) => {
         const d = e.target.value.replace(/-/g, '/');
         dateDisp.textContent = d;
+      });
+
+      // トランプのマーク（スート）変更処理
+      const suitSelect = document.getElementById('input-suit');
+      const indexEls = document.querySelectorAll('.card-index');
+      const suitMap = {
+        'spades':   { char: '♠', colorClass: 'suit-black' },
+        'hearts':   { char: '♥', colorClass: 'suit-red' },
+        'diamonds': { char: '♦', colorClass: 'suit-red' },
+        'clubs':    { char: '♣', colorClass: 'suit-black' }
+      };
+
+      suitSelect.addEventListener('change', (e) => {
+        const data = suitMap[e.target.value];
+        indexEls.forEach(el => {
+          el.querySelector('.suit').textContent = data.char;
+          el.classList.remove('suit-black', 'suit-red');
+          el.classList.add(data.colorClass);
+        });
+      });
+
+      // トランプの数字（ランク）変更処理
+      document.getElementById('input-rank').addEventListener('input', (e) => {
+        const val = e.target.value || ' ';
+        indexEls.forEach(el => {
+          el.querySelector('.rank').textContent = val.toUpperCase();
+        });
       });
 
       // レベル変更で枠デザイン切り替え
@@ -410,7 +494,7 @@
           backgroundColor: null
         }).then(canvas => {
           const link = document.createElement('a');
-          link.download = `drum-card-${Date.now()}.png`;
+          link.download = `drum-trump-${Date.now()}.png`;
           link.href = canvas.toDataURL('image/png');
           link.click();
         }).catch(err => {
@@ -418,7 +502,7 @@
           console.error(err);
         }).finally(() => {
           btn.disabled = false;
-          btn.textContent = '✨ カードを画像として保存 ✨';
+          btn.textContent = ':sparkles: トランプを画像として保存 :sparkles:';
         });
       });
     });
