@@ -301,19 +301,27 @@
     }
 
     /* ---------- LV.3 SR / Super Rare (☆2) ---------- */
-    /* ★1(フルアート)ベース ＋ 太い金フレーム＆✨キラキラ装飾（斜め光線削除） */
+    /* 最外端まで伸びる豪華極太ゴールドフレーム ＋ ✨キラキラ装飾 */
     .rarity-sr {
       background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-      padding: 10px; /* 金色フレームを太く */
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.8);
     }
-    .rarity-sr .full-art-bg { display: block; opacity: 0.95; }
+    /* フルアート画像を外枠の内側に収めることで最外端の金枠を露出 */
+    .rarity-sr .full-art-bg {
+      display: block;
+      opacity: 0.95;
+      top: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      border-radius: 10px;
+      border: 2px solid #ffe066;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
     .rarity-sr .card-art-frame { display: none; }
     .rarity-sr .card-inner {
-      border: 3px solid #ffe066; /* 内側の枠線も強調 */
-      border-radius: 12px;
       background: transparent;
-      box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
+      padding: 14px 16px;
     }
     .rarity-sr .card-name {
       color: #fff3a8;
@@ -328,12 +336,12 @@
       content: ' ✨';
       font-size: 15px;
     }
-    /* コーナーの✨キラキラ装飾 */
+    /* 四角の金枠上に配置される✨キラキラ装飾 */
     .rarity-sr::before {
       content: '✨';
       position: absolute;
-      top: 4px;
-      right: 14px;
+      top: 3px;
+      right: 8px;
       font-size: 16px;
       z-index: 10;
       filter: drop-shadow(0 0 4px #ffd700);
@@ -341,8 +349,8 @@
     .rarity-sr::after {
       content: '✨';
       position: absolute;
-      bottom: 4px;
-      left: 14px;
+      bottom: 3px;
+      left: 8px;
       font-size: 16px;
       z-index: 10;
       filter: drop-shadow(0 0 4px #ffd700);
@@ -352,7 +360,6 @@
       border: 2px solid #ffd700;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
     }
-    /* 斜め光線を完全削除 */
     .rarity-sr .card-overlay {
       background: none;
     }
@@ -520,7 +527,7 @@
         <select id="input-rarity">
           <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
-          <option value="sr">☆2 Super Rare / SR (豪華太金枠＆✨ホロ)</option>
+          <option value="sr">☆2 Super Rare / SR (最外端豪華金枠＆✨ホロ)</option>
         </select>
       </div>
 
