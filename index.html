@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TCG Card Generator</title>
+  <title>TCG Trump Card Generator</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -98,12 +98,47 @@
     .card-inner {
       width: 100%;
       height: 100%;
-      padding: 14px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
       position: relative;
       z-index: 3;
     }
+
+    /* --- トランプインデックス (左上・右下) --- */
+    .trump-index {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 0.95;
+      z-index: 6;
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      pointer-events: none;
+    }
+    .index-top-left {
+      top: 10px;
+      left: 10px;
+    }
+    .index-bottom-right {
+      bottom: 10px;
+      right: 10px;
+      transform: rotate(180deg);
+    }
+    .trump-rank {
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .trump-suit {
+      font-size: 15px;
+      margin-top: 1px;
+    }
+
+    /* スート別カラーバリエーション */
+    .suit-black { color: #f1f5f9; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
+    .suit-red { color: #ff4757; text-shadow: 0 0 8px rgba(255, 71, 87, 0.7), 0 2px 4px #000; }
+    .suit-joker { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.8), 0 2px 4px #000; }
 
     /* 属性カラーマッピング */
     .tcg-card[data-type="grass"]    { --type-color: #4CAF50; --type-color-dark: #1b5e20; }
@@ -116,13 +151,14 @@
     .tcg-card[data-type="metal"]    { --type-color: #b0bec5; --type-color-dark: #37474f; }
     .tcg-card[data-type="colorless"]{ --type-color: #cfd8dc; --type-color-dark: #455a64; }
 
-    /* --- ヘッダー --- */
+    /* --- ヘッダー (インデックス退避用余白を追加) --- */
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 5;
       margin-bottom: 8px;
+      padding-left: 20px; /* 左上インデックスとの干渉防止 */
     }
     .card-title-group {
       display: flex;
@@ -140,7 +176,7 @@
       text-transform: uppercase;
     }
     .card-name {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 900;
       color: #fff;
       margin: 0;
@@ -243,7 +279,7 @@
       color: #94a3b8;
       font-weight: 700;
       z-index: 5;
-      padding: 4px 2px 0 2px;
+      padding: 4px 22px 0 2px; /* 右下インデックスとの干渉防止 */
     }
     .rarity-symbol { font-size: 13px; letter-spacing: 1px; }
 
@@ -355,11 +391,24 @@
 <body>
 
   <div class="container">
-    <h1>TCG Card Generator</h1>
+    <h1>TCG Trump Card Generator</h1>
 
     <!-- カードプレビュー -->
     <div class="preview-wrapper">
       <div id="card" class="tcg-card rarity-normal" data-type="fire">
+        
+        <!-- 左上トランプインデックス -->
+        <div class="trump-index index-top-left suit-black">
+          <span class="trump-rank" id="disp-rank-tl">A</span>
+          <span class="trump-suit" id="disp-suit-tl">♠</span>
+        </div>
+
+        <!-- 右下トランプインデックス -->
+        <div class="trump-index index-bottom-right suit-black">
+          <span class="trump-rank" id="disp-rank-br">A</span>
+          <span class="trump-suit" id="disp-suit-br">♠</span>
+        </div>
+
         <!-- フルアート背景 (AR用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
         <!-- ホログラフィックオーバーレイ -->
@@ -404,6 +453,39 @@
 
     <!-- コントロールパネル -->
     <div class="controls">
+      <!-- トランプ設定 -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="input-suit">TRUMP SUIT (マーク)</label>
+          <select id="input-suit">
+            <option value="spade">♠ スペード</option>
+            <option value="heart">♥ ハート</option>
+            <option value="diamond">♦ ダイヤ</option>
+            <option value="club">♣ クラブ</option>
+            <option value="joker">🃏 JOKER</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="input-rank">RANK (数字)</label>
+          <select id="input-rank">
+            <option value="A">A (1)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="JK">JOKER</option>
+          </select>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="input-rarity">RARITY (レアリティ)</label>
         <select id="input-rarity">
@@ -480,6 +562,7 @@
       artFrame.style.backgroundImage = `url("${defaultImg}")`;
       fullArtBg.style.backgroundImage = `url("${defaultImg}")`;
 
+      // テキストリアルタイム反映
       const bindText = (inputId, dispId) => {
         document.getElementById(inputId).addEventListener('input', (e) => {
           document.getElementById(dispId).textContent = e.target.value;
@@ -493,6 +576,45 @@
       bindText('input-move-damage', 'disp-move-damage');
       bindText('input-move-desc', 'disp-move-desc');
 
+      // トランプ：スート（マーク）変更処理
+      const suitSelect = document.getElementById('input-suit');
+      const rankSelect = document.getElementById('input-rank');
+      const indexEls = document.querySelectorAll('.trump-index');
+      
+      const suitMap = {
+        spade:   { char: '♠', colorClass: 'suit-black' },
+        heart:   { char: '♥', colorClass: 'suit-red' },
+        diamond: { char: '♦', colorClass: 'suit-red' },
+        club:    { char: '♣', colorClass: 'suit-black' },
+        joker:   { char: '🃏', colorClass: 'suit-joker' }
+      };
+
+      suitSelect.addEventListener('change', (e) => {
+        const data = suitMap[e.target.value];
+        indexEls.forEach(el => {
+          el.querySelector('.trump-suit').textContent = data.char;
+          el.classList.remove('suit-black', 'suit-red', 'suit-joker');
+          el.classList.add(data.colorClass);
+        });
+
+        // JOKER選択時に自動でRANKもJKに切り替え
+        if (e.target.value === 'joker') {
+          rankSelect.value = 'JK';
+          updateRank('JK');
+        }
+      });
+
+      // トランプ：ランク（数字）変更処理
+      const updateRank = (val) => {
+        document.getElementById('disp-rank-tl').textContent = val;
+        document.getElementById('disp-rank-br').textContent = val;
+      };
+
+      rankSelect.addEventListener('change', (e) => {
+        updateRank(e.target.value);
+      });
+
+      // 属性変更
       const typeSelect = document.getElementById('input-type');
       const typeIconMap = {
         grass: '草', fire: '炎', water: '水', lightning: '雷',
@@ -505,6 +627,7 @@
         document.getElementById('disp-type-icon').textContent = typeIconMap[val];
       });
 
+      // レアリティ変更
       const raritySelect = document.getElementById('input-rarity');
       const raritySymbolMap = {
         normal: '◇◇',
@@ -519,6 +642,7 @@
         document.getElementById('disp-rarity').textContent = raritySymbolMap[val];
       });
 
+      // 画像アップロード
       document.getElementById('input-image').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -532,6 +656,7 @@
         }
       });
 
+      // 3Dホバーパースペクティブ
       const wrapper = document.querySelector('.preview-wrapper');
       let isExporting = false;
 
@@ -548,6 +673,7 @@
         card.style.transform = 'rotateY(0deg) rotateX(0deg)';
       });
 
+      // エクスポート処理
       document.getElementById('btn-download').addEventListener('click', () => {
         const btn = document.getElementById('btn-download');
         btn.disabled = true;
@@ -565,7 +691,7 @@
             logging: false
           }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `tcg-card-${Date.now()}.png`;
+            link.download = `tcg-trump-${Date.now()}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
           }).catch(err => {
