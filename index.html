@@ -3,38 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ドラム練習トランプ ジェネレーター</title>
+  <title>ポケポケ風 カードジェネレーター</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     /* =========================================
-       基本スタイル & スマホレイアウト
+       基本レイアウト & 操作画面
        ========================================= */
+    :root {
+      --type-color: #78C850;
+    }
+
     body {
       font-family: 'M PLUS Rounded 1c', sans-serif;
-      background-color: #f4f6f9;
+      background-color: #1a1a24;
+      color: #fff;
       margin: 0;
       padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #333;
     }
     
     .container {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
     }
 
     h1 {
       font-size: 20px;
       text-align: center;
-      color: #333;
       margin-bottom: 20px;
+      color: #e0e0e0;
+      letter-spacing: 1px;
     }
 
     .preview-wrapper {
@@ -42,23 +47,22 @@
       justify-content: center;
       margin-bottom: 25px;
       width: 100%;
-      overflow-x: auto;
+      overflow: hidden;
       padding: 10px 0;
     }
 
     .controls {
-      background: #fff;
+      background: #2a2a38;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
       margin-bottom: 30px;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
 
-    /* 横並び入力（マークと数字） */
     .form-row {
       display: flex;
       gap: 10px;
@@ -70,271 +74,413 @@
     label {
       display: block;
       margin-bottom: 6px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
-      color: #555;
+      color: #aaa;
     }
 
-    input[type="text"], input[type="date"], select, input[type="file"] {
+    input[type="text"], input[type="number"], select, input[type="file"] {
       width: 100%;
-      padding: 12px;
+      padding: 10px 12px;
       border-radius: 8px;
-      border: 2px solid #e0e0e0;
+      border: 1px solid #444;
+      background: #181822;
+      color: #fff;
       box-sizing: border-box;
       font-family: inherit;
-      font-size: 16px;
-      transition: border-color 0.3s;
-    }
-    input[type="text"]:focus, input[type="date"]:focus, select:focus {
-      outline: none;
-      border-color: #4CAF50;
+      font-size: 14px;
     }
 
     input[type="file"] {
-      padding: 8px;
-      background: #fafafa;
+      padding: 6px;
     }
 
     .btn-download {
       width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #ff7e5f, #feb47b);
-      color: #fff;
+      padding: 15px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: #111;
       border: none;
       border-radius: 30px;
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(255, 126, 95, 0.4);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      transition: transform 0.1s, filter 0.2s;
     }
     .btn-download:active {
-      transform: scale(0.97);
+      transform: scale(0.98);
     }
 
     /* =========================================
-       トランプ風デザイン (幅354px × 高さ534px)
+       ポケポケ風カード本体 (320px × 448px)
        ========================================= */
-    .playing-card {
-      width: 354px;
-      height: 534px;
-      border-radius: 18px;
-      padding: 14px; /* 白ふちの太さ */
-      box-sizing: border-box;
+    .tcg-card {
+      width: 320px;
+      height: 448px;
+      border-radius: 16px;
       position: relative;
       flex-shrink: 0;
-      transition: all 0.3s ease;
-      background-color: #ffffff;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      box-sizing: border-box;
+      background-color: #222;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      overflow: hidden;
+      user-select: none;
     }
 
-    /* 内側の装飾枠 */
-    .playing-card-inner {
+    .card-inner {
       width: 100%;
       height: 100%;
-      border: 2px solid #111;
-      border-radius: 10px;
-      position: relative;
+      box-sizing: border-box;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      box-sizing: border-box;
-      background-color: #ffffff;
+      position: relative;
+      z-index: 2;
     }
 
-    /* --- レベルごとのテーマ切り替え --- */
-    /* Lv.1 あと少し！（ノーマル） */
-    .level-1 { background-color: #ffffff; }
-    .level-1 .playing-card-inner { border-color: #333; }
+    /* --- タイプ別の背景色マップ --- */
+    .tcg-card[data-type="grass"]    { --type-color: #4CAF50; }
+    .tcg-card[data-type="fire"]     { --type-color: #FF5722; }
+    .tcg-card[data-type="water"]    { --type-color: #2196F3; }
+    .tcg-card[data-type="lightning"]{ --type-color: #FFEB3B; }
+    .tcg-card[data-type="psychic"]  { --type-color: #9C27B0; }
+    .tcg-card[data-type="fighting"] { --type-color: #FF9800; }
+    .tcg-card[data-type="darkness"] { --type-color: #424242; }
+    .tcg-card[data-type="metal"]    { --type-color: #607D8B; }
+    .tcg-card[data-type="colorless"]{ --type-color: #9E9E9E; }
 
-    /* Lv.2 基礎クリア（ゴールド） */
-    .level-2 { 
-      background-color: #fffdf0; 
-      box-shadow: 0 0 20px rgba(218,165,32,0.4);
+    /* --- カードヘッダー --- */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      z-index: 3;
     }
-    .level-2 .playing-card-inner { 
-      border: 3px solid #daa520; 
-      background-color: #fffdf0;
+    .card-title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
     }
-    
-    /* Lv.3 曲クリア（レジェンド/ダークホロ） */
-    .level-3 { 
-      background: linear-gradient(135deg, #2b2b2b, #111111);
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    .card-stage {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(0,0,0,0.6);
+      padding: 2px 6px;
+      border-radius: 4px;
       color: #fff;
     }
-    .level-3 .playing-card-inner { 
-      border: 3px solid transparent; 
-      background: linear-gradient(#222, #222) padding-box,
-                  linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff) border-box;
-    }
-
-    /* トランプのインデックス（左上と右下の数字＆マーク） */
-    .card-index {
-      position: absolute;
-      text-align: center;
-      font-family: 'Times New Roman', serif;
-      font-weight: bold;
-      z-index: 10;
-    }
-    .card-index .rank {
-      font-size: 32px;
-      line-height: 1;
-      letter-spacing: -2px;
-    }
-    .card-index .suit {
-      font-size: 26px;
-      line-height: 1;
-      margin-top: -2px;
-    }
-    
-    .index-top-left {
-      top: 10px;
-      left: 10px;
-    }
-    .index-bottom-right {
-      bottom: 10px;
-      right: 10px;
-      transform: rotate(180deg);
-    }
-
-    /* スートの色 */
-    .suit-black { color: #111; }
-    .suit-red { color: #d40000; }
-    /* Lv3の時のインデックス色 */
-    .level-3 .suit-black { color: #fff; }
-    .level-3 .suit-red { color: #ff6b6b; }
-
-    /* メインコンテンツ（マークと被らないように左右に余白） */
-    .card-content {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: 15px 45px; /* 左右45pxでインデックスを避ける */
-      z-index: 5;
-    }
-
-    /* ヘッダー部 */
-    .card-header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-    .card-title {
+    .card-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: #111;
       margin: 0;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 1px;
+      text-shadow: 0 0 2px rgba(255,255,255,0.8);
     }
-    .trainer-name {
-      font-size: 13px;
-      font-weight: 800;
-      color: #666;
-      display: block;
-      margin-top: 2px;
+    .card-hp-group {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+      color: #d00000;
+      font-weight: 900;
     }
-    .level-3 .trainer-name { color: #ccc; }
+    .card-hp-label { font-size: 10px; }
+    .card-hp-val { font-size: 20px; }
+    .card-type-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--type-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      margin-left: 4px;
+    }
 
-    /* 画像部 */
-    .card-image-area {
-      flex-grow: 1;
+    /* --- メインイラストエリア --- */
+    .card-art-frame {
       width: 100%;
-      border: 2px solid #333;
-      border-radius: 6px;
+      height: 180px;
+      border-radius: 8px;
       overflow: hidden;
       position: relative;
-      background: #e0e0e0;
-      margin-bottom: 15px;
+      border: 3px solid #f0f0f0;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+      background: #333;
+      transition: all 0.3s;
     }
-    .level-2 .card-image-area { border-color: #daa520; }
-    .level-3 .card-image-area { border-color: rgba(255,255,255,0.4); }
-
-    .card-image-area img {
+    .card-art-frame img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
 
-    /* スキル・評価基準部 */
+    /* --- ワザ＆テキストエリア --- */
     .card-body {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 4px;
+      z-index: 3;
     }
-    .skill-area {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .level-2 .skill-area { border-color: #daa520; background: rgba(255, 253, 240, 0.9); }
-    .level-3 .skill-area { background: rgba(0, 0, 0, 0.6); border-color: #666; }
 
-    .skill-desc {
-      margin: 0 0 5px 0;
+    .move-block {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 8px;
+      padding: 8px;
+      color: #111;
+      backdrop-filter: blur(4px);
+    }
+    .move-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 900;
+    }
+    .move-cost {
+      display: flex;
+      gap: 3px;
+    }
+    .cost-energy {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--type-color);
+    }
+    .move-name {
+      font-size: 14px;
+      flex-grow: 1;
+      margin-left: 6px;
+    }
+    .move-damage {
       font-size: 16px;
-      font-weight: 800;
+    }
+    .move-desc {
+      font-size: 10px;
+      margin: 4px 0 0 0;
+      color: #444;
       line-height: 1.3;
     }
-    .skill-criteria {
-      margin: 0;
-      font-size: 12px;
-      font-weight: 500;
-      color: #444;
-      border-top: 1px dashed #aaa;
-      padding-top: 6px;
-      line-height: 1.4;
-    }
-    .level-3 .skill-criteria { color: #ddd; border-top-color: #666; }
 
+    /* --- フッター --- */
     .card-footer {
-      text-align: right;
-      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      color: #333;
       font-weight: 800;
-      opacity: 0.8;
+      z-index: 3;
+      padding: 0 4px;
     }
+    .rarity-symbol {
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+
+    /* =========================================
+       ★ レア度（階層）ごとのデザイン仕様 ★
+       ========================================= */
+
+    /* ---------- LV.1 ノーマル (◇1～◇4) ---------- */
+    .rarity-normal {
+      background: linear-gradient(160deg, #ffffff 0%, #e2e8f0 100%);
+      border: 8px solid var(--type-color);
+    }
+
+    /* ---------- LV.2 アートレア / AR (☆1) ---------- */
+    .rarity-ar {
+      border: 4px solid #fff;
+    }
+    .rarity-ar .card-art-frame {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none; border-radius: 0; z-index: 1;
+    }
+    .rarity-ar .card-name {
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+    }
+    .rarity-ar .move-block {
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .rarity-ar .move-desc { color: #ccc; }
+    .rarity-ar .card-footer { color: #fff; text-shadow: 0 1px 3px #000; }
+
+    /* ---------- LV.3 スーパーレア / SR (☆2) ---------- */
+    .rarity-sr {
+      background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+      padding: 6px;
+      border: 2px solid #fff;
+    }
+    .rarity-sr .card-inner {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(240,230,210,0.9) 100%);
+      border-radius: 10px;
+    }
+    .rarity-sr .card-art-frame {
+      border: 3px solid #daa520;
+      box-shadow: 0 0 10px rgba(218,165,32,0.5);
+    }
+    .rarity-sr::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.3) 50%, transparent 55%);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* ---------- LV.4 イマーシブ / UR (☆3) ---------- */
+    .rarity-ur {
+      background: #111;
+      padding: 6px;
+      box-shadow: 0 0 20px rgba(255, 0, 128, 0.4);
+    }
+    .rarity-ur::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #ff007f);
+      z-index: 1;
+      border-radius: 16px;
+    }
+    .rarity-ur .card-inner {
+      background: linear-gradient(160deg, #1f1f2e 0%, #0a0a10 100%);
+      border-radius: 12px;
+      z-index: 2;
+    }
+    .rarity-ur .card-art-frame {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+      opacity: 0.85;
+      z-index: 1;
+    }
+    .rarity-ur .card-name {
+      color: #ffd700;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+    .rarity-ur .card-hp-group { color: #ff4757; }
+    .rarity-ur .move-block {
+      background: rgba(15, 15, 25, 0.85);
+      color: #fff;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .rarity-ur .move-desc { color: #aaa; }
+    .rarity-ur .card-footer { color: #ffd700; }
+
+    /* ---------- LV.5 クラウンレア / Crown (👑) ---------- */
+    .rarity-crown {
+      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+      padding: 8px;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.8);
+      border-radius: 18px;
+    }
+    .rarity-crown::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: linear-gradient(45deg, 
+        transparent 40%, 
+        rgba(255, 255, 255, 0.6) 48%, 
+        rgba(255, 215, 0, 0.8) 50%, 
+        rgba(255, 255, 255, 0.6) 52%, 
+        transparent 60%);
+      pointer-events: none;
+      z-index: 4;
+    }
+    .rarity-crown .card-inner {
+      background: linear-gradient(160deg, #2c2205 0%, #000000 100%);
+      border-radius: 12px;
+      border: 2px solid #ffe066;
+      z-index: 2;
+    }
+    .rarity-crown .card-art-frame {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+      opacity: 0.82;
+      z-index: 1;
+    }
+    .rarity-crown .card-name {
+      color: #fff6d1;
+      font-size: 20px;
+      text-shadow: 0 0 10px #ffd700, 0 2px 4px #000;
+    }
+    .rarity-crown .card-hp-group {
+      color: #ffd700;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+    }
+    .rarity-crown .move-block {
+      background: linear-gradient(135deg, rgba(35, 28, 10, 0.9), rgba(10, 10, 15, 0.9));
+      color: #fff;
+      border: 1.5px solid #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+    .rarity-crown .move-desc { color: #e6d5a7; }
+    .rarity-crown .card-footer {
+      color: #ffd700;
+      text-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
+    }
+    .rarity-crown .rarity-symbol {
+      font-size: 16px;
+      filter: drop-shadow(0 0 4px #ffd700);
+    }
+
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>ドラム練習トランプ</h1>
+    <h1>ポケポケ風 カードジェネレーター</h1>
 
     <div class="preview-wrapper">
-      <div id="card" class="playing-card level-1">
-        <div class="playing-card-inner">
+      <div id="card" class="tcg-card rarity-normal" data-type="grass">
+        <div class="card-inner">
           
-          <div class="card-index index-top-left suit-black">
-            <div class="rank">A</div>
-            <div class="suit">♠</div>
-          </div>
-          <div class="card-index index-bottom-right suit-black">
-            <div class="rank">A</div>
-            <div class="suit">♠</div>
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="card-stage" id="disp-stage">たね</span>
+              <h2 class="card-name" id="disp-name">ピカチュウ</h2>
+            </div>
+            <div class="card-hp-group">
+              <span class="card-hp-label">HP</span>
+              <span class="card-hp-val" id="disp-hp">60</span>
+              <div class="card-type-icon" id="disp-type-icon">草</div>
+            </div>
           </div>
 
-          <div class="card-content">
-            <div class="card-header">
-              <h2 class="card-title" id="disp-pokemon">ポケモン名</h2>
-              <span class="trainer-name" id="disp-name">なまえ</span>
-            </div>
-            
-            <div class="card-image-area">
-              <img id="disp-image" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22260%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22260%22%20height%3D%22240%22%20fill%3D%22%23cccccc%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-size%3D%2214%22%20text-anchor%3D%22middle%22%20fill%3D%22%23666666%22%20font-family%3D%22sans-serif%22%20dy%3D%22.3em%22%3E写真をアップロード%3C%2Ftext%3E%3C%2Fsvg%3E" alt="アップロード画像">
-            </div>
-            
-            <div class="card-body">
-              <div class="skill-area">
-                <p class="skill-desc" id="disp-skill">8連符のれんしゅう</p>
-                <p class="skill-criteria" id="disp-criteria">テンポをキープしてたたけた！</p>
+          <div class="card-art-frame">
+            <img id="disp-image" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22320%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22320%22%20height%3D%22180%22%20fill%3D%22%23333344%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-size%3D%2214%22%20text-anchor%3D%22middle%22%20fill%3D%22%23888899%22%20font-family%3D%22sans-serif%22%3E画像を選択してください%3C%2Ftext%3E%3C%2Fsvg%3E" alt="イラスト">
+          </div>
+
+          <div class="card-body">
+            <div class="move-block">
+              <div class="move-header">
+                <div class="move-cost">
+                  <div class="cost-energy"></div>
+                </div>
+                <span class="move-name" id="disp-move-name">エレキショック</span>
+                <span class="move-damage" id="disp-move-damage">20</span>
               </div>
-              <div class="card-footer">
-                <span id="disp-date">2026/06/07</span>
-              </div>
+              <p class="move-desc" id="disp-move-desc">コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。</p>
             </div>
+          </div>
+
+          <div class="card-footer">
+            <span id="disp-author">Illus. MyCard</span>
+            <span class="rarity-symbol" id="disp-rarity">◇◇</span>
           </div>
 
         </div>
@@ -343,132 +489,124 @@
 
     <div class="controls">
       <div class="form-group">
-        <label for="input-level">達成レベル</label>
-        <select id="input-level">
-          <option value="1">Lv.1 "あと少し！" (ノーマル)</option>
-          <option value="2">Lv.2 "基礎クリア" (ゴールド)</option>
-          <option value="3">Lv.3 "曲クリア" (レジェンド)</option>
+        <label for="input-rarity">レア度（デザイン階層）</label>
+        <select id="input-rarity">
+          <option value="normal">◇1〜4 ノーマル（標準枠）</option>
+          <option value="ar">☆1 アートレア AR（フルアート）</option>
+          <option value="sr">☆2 スーパーレア SR（金枠＆ホロ）</option>
+          <option value="ur">☆3 イマーシブ UR（オーラ）</option>
+          <option value="crown">👑 クラウンレア (Crown)</option>
         </select>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="input-suit">マーク</label>
-          <select id="input-suit">
-            <option value="spades">♠ スペード</option>
-            <option value="hearts">♥ ハート</option>
-            <option value="diamonds">♦ ダイヤ</option>
-            <option value="clubs">♣ クラブ</option>
+          <label for="input-type">属性（タイプ）</label>
+          <select id="input-type">
+            <option value="grass">草</option>
+            <option value="fire">炎</option>
+            <option value="water">水</option>
+            <option value="lightning">雷</option>
+            <option value="psychic">超</option>
+            <option value="fighting">闘</option>
+            <option value="darkness">悪</option>
+            <option value="metal">鋼</option>
+            <option value="colorless">無色</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="input-rank">数字 (A, 2〜10, J, Q, K)</label>
-          <input type="text" id="input-rank" value="A" maxlength="2">
+          <label for="input-stage">区分</label>
+          <input type="text" id="input-stage" value="たね">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="input-name">カード名</label>
+          <input type="text" id="input-name" value="ピカチュウ">
+        </div>
+        <div class="form-group">
+          <label for="input-hp">HP</label>
+          <input type="number" id="input-hp" value="60">
         </div>
       </div>
 
       <div class="form-group">
-        <label for="input-image">写真を選ぶ（カメラ起動可）</label>
+        <label for="input-image">カードイラスト画像</label>
         <input type="file" id="input-image" accept="image/*">
       </div>
 
-      <div class="form-group">
-        <label for="input-name">名前</label>
-        <input type="text" id="input-name" placeholder="例: たろう" value="なまえ">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="input-move-name">ワザ名</label>
+          <input type="text" id="input-move-name" value="エレキショック">
+        </div>
+        <div class="form-group">
+          <label for="input-move-damage">ダメージ</label>
+          <input type="text" id="input-move-damage" value="20">
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="input-pokemon">カード名 (曲名やポケモン名)</label>
-        <input type="text" id="input-pokemon" placeholder="例: ピカチュウ" value="ポケモン名">
+        <label for="input-move-desc">ワザの説明文</label>
+        <input type="text" id="input-move-desc" value="コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。">
       </div>
 
       <div class="form-group">
-        <label for="input-skill">練習項目</label>
-        <input type="text" id="input-skill" placeholder="例: 8連符クリア！" value="8連符のれんしゅう">
+        <label for="input-author">制作者・イラストレーター表記</label>
+        <input type="text" id="input-author" value="Illus. MyCard">
       </div>
 
-      <div class="form-group">
-        <label for="input-criteria">評価基準（がんばったポイント等）</label>
-        <input type="text" id="input-criteria" placeholder="例: テンポをキープしてたたけた！" value="テンポをキープしてたたけた！">
-      </div>
-
-      <div class="form-group">
-        <label for="input-date">日付</label>
-        <input type="date" id="input-date">
-      </div>
-
-      <button id="btn-download" class="btn-download">トランプを画像として保存</button>
+      <button id="btn-download" class="btn-download">ポケポケ風カードを保存</button>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // 日付の初期値を今日に設定
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      
-      const dateInput = document.getElementById('input-date');
-      const dateDisp = document.getElementById('disp-date');
-      
-      dateInput.value = `${yyyy}-${mm}-${dd}`;
-      dateDisp.textContent = `${yyyy}/${mm}/${dd}`;
+      const card = document.getElementById('card');
 
-      // テキスト入力のリアルタイム反映処理
-      const bindInput = (inputId, dispId, prefix = '') => {
+      const bindText = (inputId, dispId) => {
         document.getElementById(inputId).addEventListener('input', (e) => {
-          document.getElementById(dispId).textContent = e.target.value ? prefix + e.target.value : ' ';
+          document.getElementById(dispId).textContent = e.target.value;
         });
       };
-      
-      // 名前の前には「ドラマー：」をつける
-      bindInput('input-name', 'disp-name', '名前：');
-      bindInput('input-pokemon', 'disp-pokemon');
-      bindInput('input-skill', 'disp-skill');
-      bindInput('input-criteria', 'disp-criteria');
 
-      // 日付の反映
-      dateInput.addEventListener('change', (e) => {
-        const d = e.target.value.replace(/-/g, '/');
-        dateDisp.textContent = d;
-      });
+      bindText('input-stage', 'disp-stage');
+      bindText('input-name', 'disp-name');
+      bindText('input-hp', 'disp-hp');
+      bindText('input-move-name', 'disp-move-name');
+      bindText('input-move-damage', 'disp-move-damage');
+      bindText('input-move-desc', 'disp-move-desc');
+      bindText('input-author', 'disp-author');
 
-      // トランプのマーク（スート）変更処理
-      const suitSelect = document.getElementById('input-suit');
-      const indexEls = document.querySelectorAll('.card-index');
-      const suitMap = {
-        'spades':   { char: '♠', colorClass: 'suit-black' },
-        'hearts':   { char: '♥', colorClass: 'suit-red' },
-        'diamonds': { char: '♦', colorClass: 'suit-red' },
-        'clubs':    { char: '♣', colorClass: 'suit-black' }
+      const typeSelect = document.getElementById('input-type');
+      const typeIconMap = {
+        grass: '草', fire: '炎', water: '水', lightning: '雷',
+        psychic: '超', fighting: '闘', darkness: '悪', metal: '鋼', colorless: '無'
       };
 
-      suitSelect.addEventListener('change', (e) => {
-        const data = suitMap[e.target.value];
-        indexEls.forEach(el => {
-          el.querySelector('.suit').textContent = data.char;
-          el.classList.remove('suit-black', 'suit-red');
-          el.classList.add(data.colorClass);
-        });
+      typeSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        card.setAttribute('data-type', val);
+        document.getElementById('disp-type-icon').textContent = typeIconMap[val];
       });
 
-      // トランプの数字（ランク）変更処理
-      document.getElementById('input-rank').addEventListener('input', (e) => {
-        const val = e.target.value || ' ';
-        indexEls.forEach(el => {
-          el.querySelector('.rank').textContent = val.toUpperCase();
-        });
+      const raritySelect = document.getElementById('input-rarity');
+      const raritySymbolMap = {
+        normal: '◇◇',
+        ar: '☆',
+        sr: '☆☆',
+        ur: '☆☆☆',
+        crown: '👑'
+      };
+
+      raritySelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        card.classList.remove('rarity-normal', 'rarity-ar', 'rarity-sr', 'rarity-ur', 'rarity-crown');
+        card.classList.add(`rarity-${val}`);
+        document.getElementById('disp-rarity').textContent = raritySymbolMap[val];
       });
 
-      // レベル変更で枠デザイン切り替え
-      document.getElementById('input-level').addEventListener('change', (e) => {
-        const card = document.getElementById('card');
-        card.classList.remove('level-1', 'level-2', 'level-3');
-        card.classList.add(`level-${e.target.value}`);
-      });
-
-      // 画像アップロード処理
       document.getElementById('input-image').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -480,29 +618,26 @@
         }
       });
 
-      // ダウンロード機能
       document.getElementById('btn-download').addEventListener('click', () => {
-        const cardElement = document.getElementById('card');
         const btn = document.getElementById('btn-download');
-        
         btn.disabled = true;
-        btn.textContent = '保存中...';
+        btn.textContent = 'カード生成中...';
 
-        html2canvas(cardElement, {
-          scale: 2,
+        html2canvas(card, {
+          scale: 3,
           useCORS: true,
           backgroundColor: null
         }).then(canvas => {
           const link = document.createElement('a');
-          link.download = `drum-trump-${Date.now()}.png`;
+          link.download = `pokepoke-card-${Date.now()}.png`;
           link.href = canvas.toDataURL('image/png');
           link.click();
         }).catch(err => {
-          alert('画像の生成に失敗しました。');
+          alert('画像の保存に失敗しました。');
           console.error(err);
         }).finally(() => {
           btn.disabled = false;
-          btn.textContent = ':sparkles: トランプを画像として保存 :sparkles:';
+          btn.textContent = 'ポケポケ風カードを保存';
         });
       });
     });
