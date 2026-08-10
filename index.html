@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TCG Pocket Card Generator</title>
+  <title>Card Generator</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,12 +58,12 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       width: 100%;
     }
 
     /* =========================================
-       カード本体 (3Dエフェクト & 高精細フレーム)
+       カード本体 (html2canvas互換構造)
        ========================================= */
     .tcg-card {
       width: var(--card-width);
@@ -75,27 +75,31 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
       overflow: hidden;
       user-select: none;
-      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      transition: transform 0.15s ease-out;
       transform-style: preserve-3d;
     }
 
-    /* 光の走査線・ホログラムオーバーレイ */
-    .tcg-card::after {
-      content: '';
+    /* 全面イラスト（AR / UR / Crown 用） */
+    .full-art-bg {
       position: absolute;
-      top: -100%; left: -100%; width: 300%; height: 300%;
-      background: linear-gradient(
-        115deg,
-        transparent 20%,
-        rgba(255, 255, 255, 0.08) 40%,
-        rgba(255, 255, 255, 0.25) 50%,
-        rgba(255, 255, 255, 0.08) 60%,
-        transparent 80%
-      );
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
+      display: none;
+    }
+
+    /* ホログラム・光沢オーバーレイ */
+    .card-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none;
-      z-index: 10;
-      transition: opacity 0.3s;
-      opacity: 0.7;
+      z-index: 4;
+      opacity: 0.6;
     }
 
     .card-inner {
@@ -105,7 +109,7 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
 
     /* 属性カラーマッピング */
@@ -124,7 +128,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 3;
+      z-index: 5;
       margin-bottom: 8px;
     }
     .card-title-group {
@@ -135,8 +139,8 @@
     .card-stage {
       font-size: 9px;
       font-weight: 900;
-      background: rgba(0, 0, 0, 0.75);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255,255,255,0.25);
       padding: 2px 6px;
       border-radius: 4px;
       color: #d1d5db;
@@ -149,7 +153,7 @@
       color: #fff;
       margin: 0;
       letter-spacing: -0.5px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.8);
     }
     .card-hp-group {
       display: flex;
@@ -180,27 +184,25 @@
       font-size: 11px;
       font-weight: 900;
       color: #fff;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.4);
       margin-left: 6px;
     }
 
-    /* --- メインイラストエリア --- */
+    /* --- 通常イラスト枠 --- */
     .card-art-frame {
       width: 100%;
-      height: 190px;
+      height: 195px;
       border-radius: 10px;
       overflow: hidden;
       position: relative;
-      border: 2px solid rgba(255,255,255,0.15);
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.5);
-      background: #000;
-      transition: all 0.3s ease;
-    }
-    .card-art-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.2);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.5);
+      background-color: #0d0e15;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: all 0.2s ease;
     }
 
     /* --- ワザ＆テキストエリア --- */
@@ -210,20 +212,18 @@
       flex-direction: column;
       justify-content: flex-end;
       gap: 8px;
-      padding-top: 10px;
-      z-index: 3;
+      padding-top: 8px;
+      z-index: 5;
     }
 
-    /* 洗練されたグラスモーフィズムUI */
+    /* html2canvas対応の透過パネル */
     .move-block {
-      background: rgba(18, 20, 29, 0.75);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(12, 14, 22, 0.88);
       border-radius: 10px;
       padding: 10px 12px;
       color: #f1f5f9;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .move-header {
       display: flex;
@@ -261,7 +261,7 @@
       font-size: 11px;
       font-weight: 500;
       margin: 6px 0 0 0;
-      color: #94a3b8;
+      color: #cbd5e1;
       line-height: 1.4;
     }
 
@@ -271,9 +271,9 @@
       justify-content: space-between;
       align-items: center;
       font-size: 10px;
-      color: #64748b;
+      color: #94a3b8;
       font-weight: 700;
-      z-index: 3;
+      z-index: 5;
       padding: 4px 2px 0 2px;
     }
     .rarity-symbol {
@@ -281,73 +281,58 @@
       letter-spacing: 1px;
     }
 
-
     /* =========================================
-       ★ 洗練されたレア度（デザイン階層） ★
+       ★ レア度（デザイン階層） ★
        ========================================= */
 
-    /* ---------- LV.1 ノーマル (◇) ---------- */
+    /* LV.1 ノーマル (◇) */
     .rarity-normal {
       background: linear-gradient(165deg, #2a2d3d 0%, #151722 100%);
       border: 6px solid var(--type-color-dark);
       box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2), 0 15px 35px rgba(0,0,0,0.7);
     }
-    .rarity-normal .card-name { color: #ffffff; }
+    .rarity-normal .full-art-bg { display: none; }
+    .rarity-normal .card-art-frame { display: block; }
 
-    /* ---------- LV.2 アートレア / AR (☆1) ---------- */
+    /* LV.2 アートレア / AR (☆1) */
     .rarity-ar {
-      border: 3px solid rgba(255, 255, 255, 0.6);
+      border: 3px solid rgba(255, 255, 255, 0.7);
       background: #000;
     }
-    .rarity-ar .card-art-frame {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      border: none; border-radius: 0; z-index: 1;
-      box-shadow: none;
-    }
-    .rarity-ar .card-art-frame img { opacity: 0.9; }
+    .rarity-ar .full-art-bg { display: block; opacity: 0.92; }
+    .rarity-ar .card-art-frame { display: none; }
     .rarity-ar .card-name {
       color: #fff;
       font-size: 20px;
       text-shadow: 0 0 10px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,0.9);
     }
     .rarity-ar .move-block {
-      background: rgba(10, 12, 18, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(10, 12, 18, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
-    .rarity-ar .card-footer { color: rgba(255, 255, 255, 0.8); text-shadow: 0 1px 3px #000; }
+    .rarity-ar .card-footer { color: #f1f5f9; text-shadow: 0 1px 3px #000; }
 
-    /* ---------- LV.3 スーパーレア / SR (☆2) ---------- */
+    /* LV.3 スーパーレア / SR (☆2) */
     .rarity-sr {
       background: linear-gradient(135deg, #e6c875 0%, #ffd700 50%, #b38b2d 100%);
       padding: 5px;
     }
+    .rarity-sr .full-art-bg { display: none; }
+    .rarity-sr .card-art-frame { display: block; border: 2px solid #ffd700; }
     .rarity-sr .card-inner {
-      background: linear-gradient(160deg, rgba(30, 25, 15, 0.92) 0%, rgba(12, 10, 5, 0.95) 100%);
+      background: linear-gradient(160deg, rgba(30, 25, 15, 0.94) 0%, rgba(12, 10, 5, 0.96) 100%);
       border-radius: 13px;
       border: 1px solid rgba(255, 215, 0, 0.4);
     }
-    .rarity-sr .card-art-frame {
-      border: 2px solid #ffd700;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-    }
     .rarity-sr .card-name {
-      background: linear-gradient(180deg, #fff 0%, #ffe58f 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #ffe58f;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.5), 0 2px 4px #000;
     }
-    .rarity-sr::after {
-      background: linear-gradient(
-        115deg,
-        transparent 30%,
-        rgba(255, 215, 0, 0.25) 45%,
-        rgba(255, 255, 255, 0.6) 50%,
-        rgba(255, 215, 0, 0.25) 55%,
-        transparent 70%
-      );
+    .rarity-sr .card-overlay {
+      background: linear-gradient(115deg, transparent 35%, rgba(255, 215, 0, 0.25) 48%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 215, 0, 0.25) 52%, transparent 65%);
     }
 
-    /* ---------- LV.4 イマーシブ / UR (☆3) ---------- */
+    /* LV.4 イマーシブ / UR (☆3) */
     .rarity-ur {
       background: #050508;
       padding: 5px;
@@ -361,74 +346,63 @@
       border-radius: 20px;
       z-index: 0;
     }
+    .rarity-ur .full-art-bg { display: block; opacity: 0.88; }
+    .rarity-ur .card-art-frame { display: none; }
     .rarity-ur .card-inner {
-      background: #090a10;
+      background: rgba(9, 10, 16, 0.5);
       border-radius: 14px;
-      z-index: 2;
-    }
-    .rarity-ur .card-art-frame {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      border: none; opacity: 0.85; z-index: 1;
+      z-index: 3;
     }
     .rarity-ur .card-name {
       color: #00f0ff;
-      text-shadow: 0 0 12px rgba(0, 240, 255, 0.8), 0 2px 4px #000;
+      text-shadow: 0 0 12px rgba(0, 240, 255, 0.9), 0 2px 4px #000;
     }
     .rarity-ur .move-block {
-      background: rgba(8, 12, 24, 0.85);
-      border: 1px solid rgba(0, 240, 255, 0.4);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+      background: rgba(8, 12, 24, 0.88);
+      border: 1px solid rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
     }
     .rarity-ur .rarity-symbol {
       color: #00f0ff;
       text-shadow: 0 0 8px #00f0ff;
     }
 
-    /* ---------- LV.5 クラウンレア (👑) ---------- */
+    /* LV.5 クラウンレア (👑) */
     .rarity-crown {
       background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
       padding: 6px;
       box-shadow: 0 0 35px rgba(255, 215, 0, 0.6), 0 0 10px rgba(255, 255, 255, 0.8);
     }
+    .rarity-crown .full-art-bg { display: block; opacity: 0.85; }
+    .rarity-crown .card-art-frame { display: none; }
     .rarity-crown .card-inner {
-      background: linear-gradient(165deg, #1c160c 0%, #050403 100%);
+      background: rgba(15, 12, 8, 0.5);
       border-radius: 14px;
       border: 1px solid #ffe066;
-      z-index: 2;
-    }
-    .rarity-crown .card-art-frame {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      border: none; opacity: 0.8; z-index: 1;
+      z-index: 3;
     }
     .rarity-crown .card-name {
       font-size: 21px;
-      background: linear-gradient(180deg, #fffdf0 0%, #ffd700 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9));
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 2px 4px #000;
     }
     .rarity-crown .card-hp-group {
       color: #ffd700;
       text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
     }
     .rarity-crown .move-block {
-      background: linear-gradient(135deg, rgba(28, 22, 12, 0.9), rgba(10, 8, 5, 0.95));
+      background: rgba(20, 16, 10, 0.9);
       border: 1px solid #ffd700;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
     }
-    .rarity-crown .move-desc { color: #cbd5e1; }
+    .rarity-crown .move-desc { color: #f1f5f9; }
     .rarity-crown .card-footer { color: #ffd700; }
     .rarity-crown .rarity-symbol {
       font-size: 16px;
       filter: drop-shadow(0 0 6px #ffd700);
     }
 
-
-    /* =========================================
-       コントロールパネル (操作UI)
-       ========================================= */
+    /* コントロールパネル */
     .controls {
       background: #12131c;
       padding: 22px;
@@ -492,14 +466,15 @@
   <div class="container">
     <h1>TCG Pocket Generator</h1>
 
-    <!-- カードプレビュー (3Dチルト対応) -->
     <div class="preview-wrapper">
       <div id="card" class="tcg-card rarity-normal" data-type="grass">
+        <div id="disp-full-art" class="full-art-bg"></div>
+        <div class="card-overlay"></div>
+
         <div class="card-inner">
-          
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-stage" id="disp-stage">BASIC</span>
+              <span class="card-stage" id="disp-stage">たね</span>
               <h2 class="card-name" id="disp-name">ピカチュウ</h2>
             </div>
             <div class="card-hp-group">
@@ -509,9 +484,7 @@
             </div>
           </div>
 
-          <div class="card-art-frame">
-            <img id="disp-image" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22330%22%20height%3D%22190%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22330%22%20height%3D%22190%22%20fill%3D%22%2312131c%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-size%3D%2213%22%20text-anchor%3D%22middle%22%20fill%3D%22%23475569%22%20font-family%3D%22sans-serif%22%3E画像を選択してください%3C%2Ftext%3E%3C%2Fsvg%3E" alt="イラスト">
-          </div>
+          <div id="disp-art-frame" class="card-art-frame"></div>
 
           <div class="card-body">
             <div class="move-block">
@@ -530,19 +503,17 @@
             <span id="disp-author">Illus. PocketStudio</span>
             <span class="rarity-symbol" id="disp-rarity">◇◇</span>
           </div>
-
         </div>
       </div>
     </div>
 
-    <!-- コントロールパネル -->
     <div class="controls">
       <div class="form-group">
         <label for="input-rarity">RARITY (レアリティ)</label>
         <select id="input-rarity">
           <option value="normal">◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
-          <option value="sr">☆2 Super Rare / SR (金枠＆レーザーホロ)</option>
+          <option value="sr">☆2 Super Rare / SR (金枠＆ホロ)</option>
           <option value="ur">☆3 Immersive / UR (サイバーオーラ)</option>
           <option value="crown">👑 Crown Rare (最高峰箔押し)</option>
         </select>
@@ -572,7 +543,7 @@
       <div class="form-row">
         <div class="form-group">
           <label for="input-name">NAME (カード名)</label>
-          <input type="text" id="input-name" value="キャラクター名">
+          <input type="text" id="input-name" value="ピカチュウ">
         </div>
         <div class="form-group">
           <label for="input-hp">HP</label>
@@ -613,8 +584,9 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const card = document.getElementById('card');
+      const artFrame = document.getElementById('disp-art-frame');
+      const fullArtBg = document.getElementById('disp-full-art');
 
-      // リアルタイムテキストバインド
       const bindText = (inputId, dispId) => {
         document.getElementById(inputId).addEventListener('input', (e) => {
           document.getElementById(dispId).textContent = e.target.value;
@@ -629,7 +601,6 @@
       bindText('input-move-desc', 'disp-move-desc');
       bindText('input-author', 'disp-author');
 
-      // 属性切り替え
       const typeSelect = document.getElementById('input-type');
       const typeIconMap = {
         grass: '草', fire: '炎', water: '水', lightning: '雷',
@@ -642,7 +613,6 @@
         document.getElementById('disp-type-icon').textContent = typeIconMap[val];
       });
 
-      // レアリティ切り替え
       const raritySelect = document.getElementById('input-rarity');
       const raritySymbolMap = {
         normal: '◇◇',
@@ -659,64 +629,64 @@
         document.getElementById('disp-rarity').textContent = raritySymbolMap[val];
       });
 
-      // 画像アップロード
       document.getElementById('input-image').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
           reader.onload = (event) => {
-            document.getElementById('disp-image').src = event.target.result;
+            const imgData = event.target.result;
+            artFrame.style.backgroundImage = `url("${imgData}")`;
+            fullArtBg.style.backgroundImage = `url("${imgData}")`;
           };
           reader.readAsDataURL(file);
         }
       });
 
-      // マウス移動に応じた3Dインタラクティブ効果（PC/スマホ対応）
       const wrapper = document.querySelector('.preview-wrapper');
-      
-      const handleMove = (x, y, rect) => {
-        const middleX = rect.width / 2;
-        const middleY = rect.height / 2;
-        const offsetX = (x - rect.left - middleX) / middleX;
-        const offsetY = (y - rect.top - middleY) / middleY;
-
-        card.style.transform = `rotateY(${offsetX * 12}deg) rotateX(${-offsetY * 12}deg)`;
-      };
+      let isExporting = false;
 
       wrapper.addEventListener('mousemove', (e) => {
+        if (isExporting) return;
         const rect = card.getBoundingClientRect();
-        handleMove(e.clientX, e.clientY, rect);
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        card.style.transform = `rotateY(${x / 12}deg) rotateX(${-y / 12}deg)`;
       });
 
       wrapper.addEventListener('mouseleave', () => {
+        if (isExporting) return;
         card.style.transform = 'rotateY(0deg) rotateX(0deg)';
       });
 
-      // 画像出力（保存時は傾きを一度リセットして画像化）
       document.getElementById('btn-download').addEventListener('click', () => {
         const btn = document.getElementById('btn-download');
         btn.disabled = true;
-        btn.textContent = 'PROCESSING...';
+        btn.textContent = 'EXPORTING...';
+        isExporting = true;
 
-        // 3D傾きを解除してキャプチャ
         card.style.transform = 'none';
 
-        html2canvas(card, {
-          scale: 3,
-          useCORS: true,
-          backgroundColor: null
-        }).then(canvas => {
-          const link = document.createElement('a');
-          link.download = `tcg-card-${Date.now()}.png`;
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-        }).catch(err => {
-          alert('Failed to generate image.');
-          console.error(err);
-        }).finally(() => {
-          btn.disabled = false;
-          btn.textContent = 'EXPORT CARD IMAGE';
-        });
+        setTimeout(() => {
+          html2canvas(card, {
+            scale: 3,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: null,
+            logging: false
+          }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `tcg-card-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          }).catch(err => {
+            alert('エクスポートに失敗しました。');
+            console.error(err);
+          }).finally(() => {
+            btn.disabled = false;
+            btn.textContent = 'EXPORT CARD IMAGE';
+            isExporting = false;
+          });
+        }, 150);
       });
     });
   </script>
