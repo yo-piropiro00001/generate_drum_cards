@@ -105,33 +105,33 @@
       z-index: 3;
     }
 
-    /* --- トランプインデックス (左上・右下) --- */
+    /* --- トランプインデックス (サイズ拡大・調整) --- */
     .trump-index {
       position: absolute;
       display: flex;
       flex-direction: column;
       align-items: center;
-      line-height: 0.95;
+      line-height: 0.9;
       z-index: 6;
       font-family: 'Cinzel', serif;
       font-weight: 900;
       pointer-events: none;
     }
     .index-top-left {
-      top: 10px;
-      left: 10px;
+      top: 8px;
+      left: 8px;
     }
     .index-bottom-right {
-      bottom: 10px;
-      right: 10px;
+      bottom: 8px;
+      right: 8px;
       transform: rotate(180deg);
     }
     .trump-rank {
-      font-size: 16px;
+      font-size: 21px;
       font-weight: 900;
     }
     .trump-suit {
-      font-size: 15px;
+      font-size: 19px;
       margin-top: 1px;
     }
 
@@ -158,7 +158,7 @@
       align-items: center;
       z-index: 5;
       margin-bottom: 8px;
-      padding-left: 20px;
+      padding-left: 24px;
     }
     .card-title-group {
       display: flex;
@@ -272,7 +272,7 @@
       color: #94a3b8;
       font-weight: 700;
       z-index: 5;
-      padding: 4px 22px 0 2px;
+      padding: 4px 26px 0 2px;
     }
     .rarity-symbol { font-size: 13px; letter-spacing: 1px; }
 
@@ -301,18 +301,18 @@
     }
 
     /* ---------- LV.3 SR / Super Rare (☆2) ---------- */
-    /* 最外端まで伸びる豪華金枠 ＋ 埋め込み宝石（ルビー/サファイア/エメラルド/トパーズ） ＋ 発光粒子 */
+    /* 最外端豪華金枠 ＋ 高密度多色キラキラ発光粒子 (宝石埋め込みは削除) */
     .rarity-sr {
       background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-      box-shadow: 0 0 35px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 0, 128, 0.4);
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.85), 0 0 20px rgba(0, 240, 255, 0.5);
     }
     .rarity-sr .full-art-bg {
       display: block;
       opacity: 0.95;
-      top: 14px;
-      left: 14px;
-      width: calc(100% - 28px);
-      height: calc(100% - 28px);
+      top: 12px;
+      left: 12px;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
       border-radius: 10px;
       border: 2px solid #ffe066;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
@@ -330,49 +330,48 @@
     .rarity-sr .card-name::after { content: ' ✨'; font-size: 15px; }
     .rarity-sr .card-hp-group { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.9); }
 
-    /* 埋め込まれた宝石（四隅＋四辺の中央） */
-    .rarity-sr::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 8;
-      background-image: 
-        /* 左上: ルビー */
-        radial-gradient(circle at 7px 7px, #ff4d4d 0%, #cc0000 50%, #660000 100%),
-        /* 右上: サファイア */
-        radial-gradient(circle at calc(100% - 7px) 7px, #4da6ff 0%, #0066cc 50%, #002b80 100%),
-        /* 左下: エメラルド */
-        radial-gradient(circle at 7px calc(100% - 7px), #4dff88 0%, #00cc44 50%, #004d1a 100%),
-        /* 右下: アメジスト */
-        radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #e600e6 0%, #990099 50%, #4d004d 100%),
-        /* 上中央: トパーズ */
-        radial-gradient(circle at 50% 6px, #ffff66 0%, #ffcc00 50%, #997a00 100%),
-        /* 下中央: トパーズ */
-        radial-gradient(circle at 50% calc(100% - 6px), #ffff66 0%, #ffcc00 50%, #997a00 100%);
-      background-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px, 10px 10px, 10px 10px;
-      background-repeat: no-repeat;
-    }
-
-    /* 全体に散りばめられた輝く宝石＆発光粒子 */
+    /* 高密度＆高カラフル発光粒子のレイヤー */
     .rarity-sr .card-overlay {
       background-image: 
-        radial-gradient(circle at 18% 22%, rgba(255, 215, 0, 0.9) 0%, transparent 8px),
-        radial-gradient(circle at 82% 28%, rgba(0, 240, 255, 0.9) 0%, transparent 8px),
-        radial-gradient(circle at 25% 75%, rgba(255, 0, 128, 0.9) 0%, transparent 8px),
-        radial-gradient(circle at 78% 82%, rgba(50, 255, 126, 0.9) 0%, transparent 8px),
-        radial-gradient(2px 2px at 30px 40px, #ffffff, transparent),
-        radial-gradient(3px 3px at 70px 120px, #ffd700, transparent),
-        radial-gradient(2px 2px at 120px 80px, #00f0ff, transparent),
-        radial-gradient(3px 3px at 200px 160px, #ffffff, transparent),
-        radial-gradient(2px 2px at 280px 90px, #ff007f, transparent),
-        radial-gradient(3px 3px at 50px 260px, #ffd700, transparent),
-        radial-gradient(2px 2px at 150px 320px, #ffffff, transparent),
-        radial-gradient(3px 3px at 240px 280px, #00f0ff, transparent),
-        radial-gradient(2px 2px at 290px 390px, #ff007f, transparent),
-        radial-gradient(3px 3px at 90px 420px, #ffffff, transparent);
+        /* 大粒キラキラ発光オーラ */
+        radial-gradient(circle at 15% 15%, rgba(255, 215, 0, 0.8) 0%, transparent 12px),
+        radial-gradient(circle at 85% 20%, rgba(0, 240, 255, 0.8) 0%, transparent 12px),
+        radial-gradient(circle at 20% 70%, rgba(255, 0, 128, 0.8) 0%, transparent 12px),
+        radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.8) 0%, transparent 12px),
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.9) 0%, transparent 14px),
+        radial-gradient(circle at 70% 60%, rgba(168, 85, 247, 0.8) 0%, transparent 12px),
+        radial-gradient(circle at 35% 85%, rgba(255, 159, 67, 0.8) 0%, transparent 12px),
+        /* 高密度多色ジュエル粒子（上層） */
+        radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
+        radial-gradient(3px 3px at 50px 80px, #ffd700, transparent),
+        radial-gradient(2px 2px at 90px 40px, #00f0ff, transparent),
+        radial-gradient(3px 3px at 140px 110px, #ff007f, transparent),
+        radial-gradient(2px 2px at 180px 50px, #00ff88, transparent),
+        radial-gradient(3px 3px at 220px 90px, #a855f7, transparent),
+        radial-gradient(2px 2px at 270px 35px, #ff9f43, transparent),
+        radial-gradient(3px 3px at 300px 100px, #ffffff, transparent),
+        /* 高密度多色ジュエル粒子（中層） */
+        radial-gradient(3px 3px at 35px 170px, #00f0ff, transparent),
+        radial-gradient(2px 2px at 75px 220px, #ff007f, transparent),
+        radial-gradient(3px 3px at 115px 190px, #ffd700, transparent),
+        radial-gradient(2px 2px at 165px 240px, #ffffff, transparent),
+        radial-gradient(3px 3px at 205px 200px, #00ff88, transparent),
+        radial-gradient(2px 2px at 255px 230px, #a855f7, transparent),
+        radial-gradient(3px 3px at 295px 180px, #ff9f43, transparent),
+        /* 高密度多色ジュエル粒子（下層） */
+        radial-gradient(2px 2px at 25px 300px, #ffd700, transparent),
+        radial-gradient(3px 3px at 65px 360px, #ffffff, transparent),
+        radial-gradient(2px 2px at 105px 310px, #a855f7, transparent),
+        radial-gradient(3px 3px at 155px 370px, #00f0ff, transparent),
+        radial-gradient(2px 2px at 195px 330px, #ff007f, transparent),
+        radial-gradient(3px 3px at 245px 380px, #00ff88, transparent),
+        radial-gradient(2px 2px at 285px 320px, #ff9f43, transparent),
+        radial-gradient(3px 3px at 45px 430px, #ff007f, transparent),
+        radial-gradient(2px 2px at 125px 440px, #00ff88, transparent),
+        radial-gradient(3px 3px at 185px 425px, #ffd700, transparent),
+        radial-gradient(2px 2px at 265px 435px, #00f0ff, transparent);
       background-repeat: no-repeat;
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .rarity-sr .move-block {
@@ -465,7 +464,7 @@
 
         <!-- フルアート背景 (AR/SR用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
-        <!-- オーバーレイ (宝石・発光粒子) -->
+        <!-- オーバーレイ (高密度・多色発光粒子) -->
         <div class="card-overlay"></div>
 
         <div class="card-inner">
@@ -544,7 +543,7 @@
         <select id="input-rarity">
           <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
-          <option value="sr">☆2 Super Rare / SR (宝石金枠＆✨ジュエル粒子)</option>
+          <option value="sr">☆2 Super Rare / SR (豪華金枠＆キラキラ高密度ホロ)</option>
         </select>
       </div>
 
