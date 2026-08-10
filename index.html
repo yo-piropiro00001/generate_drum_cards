@@ -186,13 +186,13 @@
     .card-hp-group {
       display: flex;
       align-items: baseline;
-      gap: 2px;
+      gap: 3px;
       color: #ff5252;
       font-family: 'Teko', sans-serif;
       line-height: 1;
       text-shadow: 0 2px 4px rgba(0,0,0,0.9);
     }
-    .card-hp-label { font-size: 13px; font-weight: 700; }
+    .card-hp-label { font-size: 15px; font-weight: 700; font-family: 'Cinzel', serif; }
     .card-hp-val { font-size: 28px; font-weight: 700; letter-spacing: -1px; }
     
     .card-type-icon {
@@ -301,67 +301,84 @@
     }
 
     /* ---------- LV.3 SR / Super Rare (☆2) ---------- */
-    /* 最外端まで伸びる豪華極太ゴールドフレーム ＋ ✨キラキラ装飾 */
+    /* 最外端まで伸びる豪華金枠 ＋ 埋め込み宝石（ルビー/サファイア/エメラルド/トパーズ） ＋ 発光粒子 */
     .rarity-sr {
       background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-      box-shadow: 0 0 35px rgba(255, 215, 0, 0.8);
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 0, 128, 0.4);
     }
-    /* フルアート画像を外枠の内側に収めることで最外端の金枠を露出 */
     .rarity-sr .full-art-bg {
       display: block;
       opacity: 0.95;
-      top: 10px;
-      left: 10px;
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
+      top: 14px;
+      left: 14px;
+      width: calc(100% - 28px);
+      height: calc(100% - 28px);
       border-radius: 10px;
       border: 2px solid #ffe066;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
     }
     .rarity-sr .card-art-frame { display: none; }
     .rarity-sr .card-inner {
       background: transparent;
-      padding: 14px 16px;
+      padding: 16px 18px;
     }
     .rarity-sr .card-name {
       color: #fff3a8;
       text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 2px 4px #000;
     }
-    /* 名前前後の✨装飾 */
-    .rarity-sr .card-name::before {
-      content: '✨ ';
-      font-size: 15px;
-    }
-    .rarity-sr .card-name::after {
-      content: ' ✨';
-      font-size: 15px;
-    }
-    /* 四角の金枠上に配置される✨キラキラ装飾 */
+    .rarity-sr .card-name::before { content: '✨ '; font-size: 15px; }
+    .rarity-sr .card-name::after { content: ' ✨'; font-size: 15px; }
+    .rarity-sr .card-hp-group { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.9); }
+
+    /* 埋め込まれた宝石（四隅＋四辺の中央） */
     .rarity-sr::before {
-      content: '✨';
+      content: '';
       position: absolute;
-      top: 3px;
-      right: 8px;
-      font-size: 16px;
-      z-index: 10;
-      filter: drop-shadow(0 0 4px #ffd700);
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 8;
+      background-image: 
+        /* 左上: ルビー */
+        radial-gradient(circle at 7px 7px, #ff4d4d 0%, #cc0000 50%, #660000 100%),
+        /* 右上: サファイア */
+        radial-gradient(circle at calc(100% - 7px) 7px, #4da6ff 0%, #0066cc 50%, #002b80 100%),
+        /* 左下: エメラルド */
+        radial-gradient(circle at 7px calc(100% - 7px), #4dff88 0%, #00cc44 50%, #004d1a 100%),
+        /* 右下: アメジスト */
+        radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #e600e6 0%, #990099 50%, #4d004d 100%),
+        /* 上中央: トパーズ */
+        radial-gradient(circle at 50% 6px, #ffff66 0%, #ffcc00 50%, #997a00 100%),
+        /* 下中央: トパーズ */
+        radial-gradient(circle at 50% calc(100% - 6px), #ffff66 0%, #ffcc00 50%, #997a00 100%);
+      background-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px, 10px 10px, 10px 10px;
+      background-repeat: no-repeat;
     }
-    .rarity-sr::after {
-      content: '✨';
-      position: absolute;
-      bottom: 3px;
-      left: 8px;
-      font-size: 16px;
-      z-index: 10;
-      filter: drop-shadow(0 0 4px #ffd700);
+
+    /* 全体に散りばめられた輝く宝石＆発光粒子 */
+    .rarity-sr .card-overlay {
+      background-image: 
+        radial-gradient(circle at 18% 22%, rgba(255, 215, 0, 0.9) 0%, transparent 8px),
+        radial-gradient(circle at 82% 28%, rgba(0, 240, 255, 0.9) 0%, transparent 8px),
+        radial-gradient(circle at 25% 75%, rgba(255, 0, 128, 0.9) 0%, transparent 8px),
+        radial-gradient(circle at 78% 82%, rgba(50, 255, 126, 0.9) 0%, transparent 8px),
+        radial-gradient(2px 2px at 30px 40px, #ffffff, transparent),
+        radial-gradient(3px 3px at 70px 120px, #ffd700, transparent),
+        radial-gradient(2px 2px at 120px 80px, #00f0ff, transparent),
+        radial-gradient(3px 3px at 200px 160px, #ffffff, transparent),
+        radial-gradient(2px 2px at 280px 90px, #ff007f, transparent),
+        radial-gradient(3px 3px at 50px 260px, #ffd700, transparent),
+        radial-gradient(2px 2px at 150px 320px, #ffffff, transparent),
+        radial-gradient(3px 3px at 240px 280px, #00f0ff, transparent),
+        radial-gradient(2px 2px at 290px 390px, #ff007f, transparent),
+        radial-gradient(3px 3px at 90px 420px, #ffffff, transparent);
+      background-repeat: no-repeat;
+      opacity: 0.85;
     }
+
     .rarity-sr .move-block {
       background: rgba(8, 10, 16, 0.88);
       border: 2px solid #ffd700;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-    }
-    .rarity-sr .card-overlay {
-      background: none;
     }
 
     /* =========================================
@@ -448,7 +465,7 @@
 
         <!-- フルアート背景 (AR/SR用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
-        <!-- オーバーレイ -->
+        <!-- オーバーレイ (宝石・発光粒子) -->
         <div class="card-overlay"></div>
 
         <div class="card-inner">
@@ -458,7 +475,7 @@
               <h2 class="card-name" id="disp-name">ジバニャン</h2>
             </div>
             <div class="card-hp-group">
-              <span class="card-hp-label">HP</span>
+              <span class="card-hp-label">Lv</span>
               <span class="card-hp-val" id="disp-hp">180</span>
               <div class="card-type-icon" id="disp-type-icon">炎</div>
             </div>
@@ -527,7 +544,7 @@
         <select id="input-rarity">
           <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
-          <option value="sr">☆2 Super Rare / SR (最外端豪華金枠＆✨ホロ)</option>
+          <option value="sr">☆2 Super Rare / SR (宝石金枠＆✨ジュエル粒子)</option>
         </select>
       </div>
 
@@ -558,7 +575,7 @@
           <input type="text" id="input-name" value="ジバニャン">
         </div>
         <div class="form-group">
-          <label for="input-hp">HP</label>
+          <label for="input-hp">LV (レベル)</label>
           <input type="number" id="input-hp" value="180">
         </div>
       </div>
