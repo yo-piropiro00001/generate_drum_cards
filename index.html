@@ -151,7 +151,7 @@
     .tcg-card[data-type="metal"]    { --type-color: #b0bec5; --type-color-dark: #37474f; }
     .tcg-card[data-type="colorless"]{ --type-color: #cfd8dc; --type-color-dark: #455a64; }
 
-    /* --- ヘッダー (インデックス退避用余白を追加) --- */
+    /* --- ヘッダー --- */
     .card-header {
       display: flex;
       justify-content: space-between;
@@ -301,30 +301,60 @@
     }
 
     /* ---------- LV.3 SR / Super Rare (☆2) ---------- */
-    /* ★1(フルアート)ベース ＋ 金フレームデザイン */
+    /* ★1(フルアート)ベース ＋ 太い金フレーム＆✨キラキラ装飾（斜め光線削除） */
     .rarity-sr {
-      background: linear-gradient(135deg, #f3e5ab 0%, #ffd700 30%, #b38728 70%, #fbf5b7 100%);
-      padding: 5px;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+      padding: 10px; /* 金色フレームを太く */
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
     }
     .rarity-sr .full-art-bg { display: block; opacity: 0.95; }
     .rarity-sr .card-art-frame { display: none; }
     .rarity-sr .card-inner {
-      border: 2px solid #ffd700;
+      border: 3px solid #ffe066; /* 内側の枠線も強調 */
       border-radius: 12px;
       background: transparent;
+      box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
     }
     .rarity-sr .card-name {
       color: #fff3a8;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 2px 4px #000;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 2px 4px #000;
+    }
+    /* 名前前後の✨装飾 */
+    .rarity-sr .card-name::before {
+      content: '✨ ';
+      font-size: 15px;
+    }
+    .rarity-sr .card-name::after {
+      content: ' ✨';
+      font-size: 15px;
+    }
+    /* コーナーの✨キラキラ装飾 */
+    .rarity-sr::before {
+      content: '✨';
+      position: absolute;
+      top: 4px;
+      right: 14px;
+      font-size: 16px;
+      z-index: 10;
+      filter: drop-shadow(0 0 4px #ffd700);
+    }
+    .rarity-sr::after {
+      content: '✨';
+      position: absolute;
+      bottom: 4px;
+      left: 14px;
+      font-size: 16px;
+      z-index: 10;
+      filter: drop-shadow(0 0 4px #ffd700);
     }
     .rarity-sr .move-block {
-      background: rgba(8, 10, 16, 0.85);
-      border: 1.5px solid #ffd700;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+      background: rgba(8, 10, 16, 0.88);
+      border: 2px solid #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
     }
+    /* 斜め光線を完全削除 */
     .rarity-sr .card-overlay {
-      background: linear-gradient(115deg, transparent 35%, rgba(255, 215, 0, 0.3) 48%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 215, 0, 0.3) 52%, transparent 65%);
+      background: none;
     }
 
     /* =========================================
@@ -411,7 +441,7 @@
 
         <!-- フルアート背景 (AR/SR用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
-        <!-- ホログラフィックオーバーレイ -->
+        <!-- オーバーレイ -->
         <div class="card-overlay"></div>
 
         <div class="card-inner">
@@ -490,7 +520,7 @@
         <select id="input-rarity">
           <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
-          <option value="sr">☆2 Super Rare / SR (金枠フルアート＆ホロ)</option>
+          <option value="sr">☆2 Super Rare / SR (豪華太金枠＆✨ホロ)</option>
         </select>
       </div>
 
