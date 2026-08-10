@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Pocket Card Generator</title>
+  <title>TCG Card Generator</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,7 +237,7 @@
     /* --- フッター --- */
     .card-footer {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       font-size: 10px;
       color: #94a3b8;
@@ -247,9 +247,8 @@
     }
     .rarity-symbol { font-size: 13px; letter-spacing: 1px; }
 
-
     /* =========================================
-       ★ 豪華デザイン階層 (レアリティ演出) ★
+       デザイン階層 (レアリティ演出)
        ========================================= */
 
     /* ---------- LV.1 Normal (◇) ---------- */
@@ -291,111 +290,6 @@
     .rarity-sr .card-overlay {
       background: linear-gradient(115deg, transparent 35%, rgba(255, 215, 0, 0.3) 48%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 215, 0, 0.3) 52%, transparent 65%);
     }
-
-    /* ---------- 🌌 LV.4 Immersive / UR (☆3) ---------- */
-    .rarity-ur {
-      background: linear-gradient(135deg, #ff007f, #00f0ff, #7b2cbf, #ff007f);
-      background-size: 200% 200%;
-      padding: 6px;
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.5), 0 0 20px rgba(255, 0, 128, 0.5);
-    }
-    .rarity-ur .full-art-bg { display: block; opacity: 0.92; }
-    .rarity-ur .card-art-frame { display: none; }
-    .rarity-ur .card-inner {
-      background: linear-gradient(180deg, rgba(5, 7, 15, 0.6) 0%, rgba(15, 5, 25, 0.8) 100%);
-      border-radius: 12px;
-      border: 1.5px solid rgba(0, 240, 255, 0.8);
-      box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.3);
-    }
-    .rarity-ur .card-name {
-      color: #00f0ff;
-      text-shadow: 0 0 12px #00f0ff, 0 0 20px #00f0ff, 0 2px 4px #000;
-    }
-    .rarity-ur .card-hp-group {
-      color: #ff007f;
-      text-shadow: 0 0 12px #ff007f;
-    }
-    .rarity-ur .move-block {
-      background: rgba(6, 10, 22, 0.92);
-      border: 1.5px solid #00f0ff;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
-    }
-    .rarity-ur .move-damage {
-      color: #00f0ff;
-      text-shadow: 0 0 10px #00f0ff;
-    }
-    .rarity-ur .rarity-symbol {
-      color: #00f0ff;
-      text-shadow: 0 0 10px #00f0ff;
-    }
-    .rarity-ur .card-overlay {
-      background: radial-gradient(circle at 50% 30%, rgba(0, 240, 255, 0.25), transparent 70%),
-                  linear-gradient(135deg, rgba(255, 0, 128, 0.2) 0%, transparent 100%);
-    }
-
-    /* ---------- 👑 LV.5 Crown Rare (最高峰クラウン) ---------- */
-    .rarity-crown {
-      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-      padding: 8px;
-      box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.9);
-      border-radius: 18px;
-    }
-    .rarity-crown .full-art-bg { display: block; opacity: 0.88; }
-    .rarity-crown .card-art-frame { display: none; }
-    
-    /* クラウン専用・豪華ゴールドインナーフレーム */
-    .rarity-crown .card-inner {
-      background: linear-gradient(165deg, rgba(20, 15, 5, 0.75) 0%, rgba(5, 4, 2, 0.9) 100%);
-      border-radius: 10px;
-      border: 2px solid #ffe066;
-      box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.5), 0 0 10px rgba(0,0,0,0.8);
-      position: relative;
-    }
-
-    /* 四隅のゴールドエンブレム装飾 (CSS疑似要素) */
-    .rarity-crown::before {
-      content: '👑';
-      position: absolute;
-      top: 2px; left: 50%;
-      transform: translateX(-50%);
-      font-size: 18px;
-      z-index: 10;
-      filter: drop-shadow(0 0 6px #ffd700);
-    }
-
-    .rarity-crown .card-name {
-      font-size: 22px;
-      color: #fffdf0;
-      text-shadow: 0 0 12px #ffd700, 0 0 24px #ffd700, 0 2px 5px #000;
-    }
-    .rarity-crown .card-hp-group {
-      color: #ffd700;
-      text-shadow: 0 0 12px #ffd700, 0 2px 4px #000;
-    }
-    .rarity-crown .move-block {
-      background: linear-gradient(135deg, rgba(25, 20, 10, 0.95), rgba(8, 6, 3, 0.98));
-      border: 2px solid #ffd700;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
-    }
-    .rarity-crown .move-name { color: #fffdf0; }
-    .rarity-crown .move-damage {
-      color: #ffd700;
-      text-shadow: 0 0 10px #ffd700;
-    }
-    .rarity-crown .move-desc { color: #fef08a; }
-    .rarity-crown .card-footer {
-      color: #ffd700;
-      text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
-    }
-    .rarity-crown .rarity-symbol {
-      font-size: 18px;
-      filter: drop-shadow(0 0 8px #ffd700);
-    }
-    .rarity-crown .card-overlay {
-      background: radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.35), transparent 70%),
-                  linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
-    }
-
 
     /* =========================================
        コントロールパネル (操作UI)
@@ -461,12 +355,12 @@
 <body>
 
   <div class="container">
-    <h1>TCG Pocket Generator</h1>
+    <h1>TCG Card Generator</h1>
 
     <!-- カードプレビュー -->
     <div class="preview-wrapper">
-      <div id="card" class="tcg-card rarity-crown" data-type="grass">
-        <!-- フルアート背景 -->
+      <div id="card" class="tcg-card rarity-normal" data-type="fire">
+        <!-- フルアート背景 (AR用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
         <!-- ホログラフィックオーバーレイ -->
         <div class="card-overlay"></div>
@@ -502,8 +396,7 @@
           </div>
 
           <div class="card-footer">
-            <span id="disp-author">Illus. PocketStudio</span>
-            <span class="rarity-symbol" id="disp-rarity">👑</span>
+            <span class="rarity-symbol" id="disp-rarity">◇◇</span>
           </div>
         </div>
       </div>
@@ -514,11 +407,9 @@
       <div class="form-group">
         <label for="input-rarity">RARITY (レアリティ)</label>
         <select id="input-rarity">
-          <option value="normal">◇1〜4 Normal (標準)</option>
+          <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
           <option value="sr">☆2 Super Rare / SR (金枠＆ホロ)</option>
-          <option value="ur">☆3 Immersive / UR (サイバーオーラ)</option>
-          <option value="crown" selected>👑 Crown Rare (最高峰箔押し)</option>
         </select>
       </div>
 
@@ -575,11 +466,6 @@
         <input type="text" id="input-move-desc" value="このポケモンについているエネルギーを2個トラッシュする。">
       </div>
 
-      <div class="form-group">
-        <label for="input-author">CREDIT (制作者表記)</label>
-        <input type="text" id="input-author" value="Illus. PocketStudio">
-      </div>
-
       <button id="btn-download" class="btn-download">EXPORT CARD IMAGE</button>
     </div>
   </div>
@@ -589,9 +475,6 @@
       const card = document.getElementById('card');
       const artFrame = document.getElementById('disp-art-frame');
       const fullArtBg = document.getElementById('disp-full-art');
-
-      // 初期属性を「炎」に設定
-      card.setAttribute('data-type', 'fire');
 
       const defaultImg = "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22330%22%20height%3D%22195%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22330%22%20height%3D%22195%22%20fill%3D%22%2312131c%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-size%3D%2213%22%20text-anchor%3D%22middle%22%20fill%3D%22%23475569%22%20font-family%3D%22sans-serif%22%3E画像を選択してください%3C%2Ftext%3E%3C%2Fsvg%3E";
       artFrame.style.backgroundImage = `url("${defaultImg}")`;
@@ -609,7 +492,6 @@
       bindText('input-move-name', 'disp-move-name');
       bindText('input-move-damage', 'disp-move-damage');
       bindText('input-move-desc', 'disp-move-desc');
-      bindText('input-author', 'disp-author');
 
       const typeSelect = document.getElementById('input-type');
       const typeIconMap = {
@@ -627,14 +509,12 @@
       const raritySymbolMap = {
         normal: '◇◇',
         ar: '☆',
-        sr: '☆☆',
-        ur: '☆☆☆',
-        crown: '👑'
+        sr: '☆☆'
       };
 
       raritySelect.addEventListener('change', (e) => {
         const val = e.target.value;
-        card.classList.remove('rarity-normal', 'rarity-ar', 'rarity-sr', 'rarity-ur', 'rarity-crown');
+        card.classList.remove('rarity-normal', 'rarity-ar', 'rarity-sr');
         card.classList.add(`rarity-${val}`);
         document.getElementById('disp-rarity').textContent = raritySymbolMap[val];
       });
