@@ -158,7 +158,7 @@
       align-items: center;
       z-index: 5;
       margin-bottom: 8px;
-      padding-left: 20px; /* 左上インデックスとの干渉防止 */
+      padding-left: 20px;
     }
     .card-title-group {
       display: flex;
@@ -259,13 +259,6 @@
       border: 1px solid rgba(255,255,255,0.4);
     }
     .move-name { font-size: 15px; font-weight: 800; flex-grow: 1; margin-left: 8px; }
-    .move-damage {
-      font-family: 'Teko', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1;
-      color: #fff;
-    }
     .move-desc {
       font-size: 11px; font-weight: 500; margin: 6px 0 0 0; color: #cbd5e1; line-height: 1.4;
     }
@@ -279,7 +272,7 @@
       color: #94a3b8;
       font-weight: 700;
       z-index: 5;
-      padding: 4px 22px 0 2px; /* 右下インデックスとの干渉防止 */
+      padding: 4px 22px 0 2px;
     }
     .rarity-symbol { font-size: 13px; letter-spacing: 1px; }
 
@@ -308,20 +301,27 @@
     }
 
     /* ---------- LV.3 SR / Super Rare (☆2) ---------- */
+    /* ★1(フルアート)ベース ＋ 金フレームデザイン */
     .rarity-sr {
       background: linear-gradient(135deg, #f3e5ab 0%, #ffd700 30%, #b38728 70%, #fbf5b7 100%);
-      padding: 6px;
+      padding: 5px;
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
     }
-    .rarity-sr .full-art-bg { display: none; }
-    .rarity-sr .card-art-frame { display: block; border: 2.5px solid #ffd700; }
+    .rarity-sr .full-art-bg { display: block; opacity: 0.95; }
+    .rarity-sr .card-art-frame { display: none; }
     .rarity-sr .card-inner {
-      background: linear-gradient(160deg, rgba(28, 22, 12, 0.95) 0%, rgba(10, 8, 4, 0.98) 100%);
+      border: 2px solid #ffd700;
       border-radius: 12px;
-      border: 1px solid rgba(255, 215, 0, 0.5);
+      background: transparent;
     }
     .rarity-sr .card-name {
       color: #fff3a8;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 2px 4px #000;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 2px 4px #000;
+    }
+    .rarity-sr .move-block {
+      background: rgba(8, 10, 16, 0.85);
+      border: 1.5px solid #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     }
     .rarity-sr .card-overlay {
       background: linear-gradient(115deg, transparent 35%, rgba(255, 215, 0, 0.3) 48%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 215, 0, 0.3) 52%, transparent 65%);
@@ -409,7 +409,7 @@
           <span class="trump-suit" id="disp-suit-br">♠</span>
         </div>
 
-        <!-- フルアート背景 (AR用) -->
+        <!-- フルアート背景 (AR/SR用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
         <!-- ホログラフィックオーバーレイ -->
         <div class="card-overlay"></div>
@@ -427,7 +427,7 @@
             </div>
           </div>
 
-          <!-- 通常イラスト枠（Normal/SR用） -->
+          <!-- 通常イラスト枠（Normal用） -->
           <div id="disp-art-frame" class="card-art-frame"></div>
 
           <div class="card-body">
@@ -438,7 +438,6 @@
                   <div class="cost-energy"></div>
                 </div>
                 <span class="move-name" id="disp-move-name">達成項目</span>
-                <span class="move-damage" id="disp-move-damage">200</span>
               </div>
               <p class="move-desc" id="disp-move-desc">説明文</p>
             </div>
@@ -491,7 +490,7 @@
         <select id="input-rarity">
           <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
-          <option value="sr">☆2 Super Rare / SR (金枠＆ホロ)</option>
+          <option value="sr">☆2 Super Rare / SR (金枠フルアート＆ホロ)</option>
         </select>
       </div>
 
@@ -532,15 +531,9 @@
         <input type="file" id="input-image" accept="image/*">
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="input-move-name">SKILL NAME (達成項目)</label>
-          <input type="text" id="input-move-name" value="達成したこと">
-        </div>
-        <div class="form-group">
-          <label for="input-move-damage">DAMAGE</label>
-          <input type="text" id="input-move-damage" value="200">
-        </div>
+      <div class="form-group">
+        <label for="input-move-name">SKILL NAME (達成項目)</label>
+        <input type="text" id="input-move-name" value="達成したこと">
       </div>
 
       <div class="form-group">
@@ -573,7 +566,6 @@
       bindText('input-name', 'disp-name');
       bindText('input-hp', 'disp-hp');
       bindText('input-move-name', 'disp-move-name');
-      bindText('input-move-damage', 'disp-move-damage');
       bindText('input-move-desc', 'disp-move-desc');
 
       // トランプ：スート（マーク）変更処理
