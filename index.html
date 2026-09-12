@@ -105,7 +105,7 @@
       z-index: 3;
     }
 
-    /* --- トランプインデックス (サイズ拡大・調整) --- */
+    /* --- トランプインデックス --- */
     .trump-index {
       position: absolute;
       display: flex;
@@ -117,23 +117,10 @@
       font-weight: 900;
       pointer-events: none;
     }
-    .index-top-left {
-      top: 8px;
-      left: 8px;
-    }
-    .index-bottom-right {
-      bottom: 8px;
-      right: 8px;
-      transform: rotate(180deg);
-    }
-    .trump-rank {
-      font-size: 21px;
-      font-weight: 900;
-    }
-    .trump-suit {
-      font-size: 19px;
-      margin-top: 1px;
-    }
+    .index-top-left { top: 8px; left: 8px; }
+    .index-bottom-right { bottom: 8px; right: 8px; transform: rotate(180deg); }
+    .trump-rank { font-size: 21px; font-weight: 900; }
+    .trump-suit { font-size: 19px; margin-top: 1px; }
 
     /* スート別カラーバリエーション */
     .suit-black { color: #f1f5f9; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
@@ -160,11 +147,7 @@
       margin-bottom: 8px;
       padding-left: 24px;
     }
-    .card-title-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .card-title-group { display: flex; align-items: center; gap: 6px; }
     .card-stage {
       font-size: 9px;
       font-weight: 900;
@@ -245,23 +228,15 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     }
-    .move-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .move-header { display: flex; align-items: center; justify-content: space-between; }
     .move-cost { display: flex; gap: 4px; }
     .cost-energy {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
+      width: 16px; height: 16px; border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, var(--type-color), var(--type-color-dark));
       border: 1px solid rgba(255,255,255,0.4);
     }
     .move-name { font-size: 15px; font-weight: 800; flex-grow: 1; margin-left: 8px; }
-    .move-desc {
-      font-size: 11px; font-weight: 500; margin: 6px 0 0 0; color: #cbd5e1; line-height: 1.4;
-    }
+    .move-desc { font-size: 11px; font-weight: 500; margin: 6px 0 0 0; color: #cbd5e1; line-height: 1.4; }
 
     /* --- フッター --- */
     .card-footer {
@@ -301,83 +276,157 @@
     }
 
     /* ---------- LV.3 SR / Super Rare (☆2) ---------- */
-    /* 最外端豪華金枠 ＋ 高密度多色キラキラ発光粒子 (宝石埋め込みは削除) */
     .rarity-sr {
       background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
       box-shadow: 0 0 35px rgba(255, 215, 0, 0.85), 0 0 20px rgba(0, 240, 255, 0.5);
     }
     .rarity-sr .full-art-bg {
-      display: block;
-      opacity: 0.95;
-      top: 12px;
-      left: 12px;
-      width: calc(100% - 24px);
-      height: calc(100% - 24px);
-      border-radius: 10px;
-      border: 2px solid #ffe066;
+      display: block; opacity: 0.95;
+      top: 12px; left: 12px;
+      width: calc(100% - 24px); height: calc(100% - 24px);
+      border-radius: 10px; border: 2px solid #ffe066;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
     }
     .rarity-sr .card-art-frame { display: none; }
-    .rarity-sr .card-inner {
-      background: transparent;
-      padding: 16px 18px;
-    }
+    .rarity-sr .card-inner { background: transparent; padding: 16px 18px; }
     .rarity-sr .card-name {
-      color: #fff3a8;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 2px 4px #000;
+      color: #fff3a8; text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 2px 4px #000;
     }
     .rarity-sr .card-name::before { content: '✨ '; font-size: 15px; }
     .rarity-sr .card-name::after { content: ' ✨'; font-size: 15px; }
     .rarity-sr .card-hp-group { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.9); }
 
-    /* 高密度＆高カラフル発光粒子のレイヤー */
     .rarity-sr .card-overlay {
       background-image: 
-        /* 大粒キラキラ発光オーラ */
         radial-gradient(circle at 15% 15%, rgba(255, 215, 0, 0.8) 0%, transparent 12px),
         radial-gradient(circle at 85% 20%, rgba(0, 240, 255, 0.8) 0%, transparent 12px),
         radial-gradient(circle at 20% 70%, rgba(255, 0, 128, 0.8) 0%, transparent 12px),
         radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.8) 0%, transparent 12px),
-        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.9) 0%, transparent 14px),
-        radial-gradient(circle at 70% 60%, rgba(168, 85, 247, 0.8) 0%, transparent 12px),
-        radial-gradient(circle at 35% 85%, rgba(255, 159, 67, 0.8) 0%, transparent 12px),
-        /* 高密度多色ジュエル粒子（上層） */
         radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
         radial-gradient(3px 3px at 50px 80px, #ffd700, transparent),
         radial-gradient(2px 2px at 90px 40px, #00f0ff, transparent),
         radial-gradient(3px 3px at 140px 110px, #ff007f, transparent),
         radial-gradient(2px 2px at 180px 50px, #00ff88, transparent),
-        radial-gradient(3px 3px at 220px 90px, #a855f7, transparent),
-        radial-gradient(2px 2px at 270px 35px, #ff9f43, transparent),
-        radial-gradient(3px 3px at 300px 100px, #ffffff, transparent),
-        /* 高密度多色ジュエル粒子（中層） */
-        radial-gradient(3px 3px at 35px 170px, #00f0ff, transparent),
-        radial-gradient(2px 2px at 75px 220px, #ff007f, transparent),
-        radial-gradient(3px 3px at 115px 190px, #ffd700, transparent),
-        radial-gradient(2px 2px at 165px 240px, #ffffff, transparent),
-        radial-gradient(3px 3px at 205px 200px, #00ff88, transparent),
-        radial-gradient(2px 2px at 255px 230px, #a855f7, transparent),
-        radial-gradient(3px 3px at 295px 180px, #ff9f43, transparent),
-        /* 高密度多色ジュエル粒子（下層） */
-        radial-gradient(2px 2px at 25px 300px, #ffd700, transparent),
-        radial-gradient(3px 3px at 65px 360px, #ffffff, transparent),
-        radial-gradient(2px 2px at 105px 310px, #a855f7, transparent),
-        radial-gradient(3px 3px at 155px 370px, #00f0ff, transparent),
-        radial-gradient(2px 2px at 195px 330px, #ff007f, transparent),
-        radial-gradient(3px 3px at 245px 380px, #00ff88, transparent),
-        radial-gradient(2px 2px at 285px 320px, #ff9f43, transparent),
-        radial-gradient(3px 3px at 45px 430px, #ff007f, transparent),
-        radial-gradient(2px 2px at 125px 440px, #00ff88, transparent),
-        radial-gradient(3px 3px at 185px 425px, #ffd700, transparent),
-        radial-gradient(2px 2px at 265px 435px, #00f0ff, transparent);
+        radial-gradient(3px 3px at 220px 90px, #a855f7, transparent);
       background-repeat: no-repeat;
       opacity: 0.9;
     }
-
     .rarity-sr .move-block {
       background: rgba(8, 10, 16, 0.88);
       border: 2px solid #ffd700;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+
+    /* ---------- LV.4 ☆3 Secret Rare / UR (オーロラ＆雷光＆金透かし) ---------- */
+    .rarity-star3 {
+      background: linear-gradient(135deg, #2b1055, #0f0c1b, #001f3f);
+      box-shadow: 0 0 45px rgba(0, 240, 255, 0.8), 0 0 25px rgba(138, 43, 226, 0.8), inset 0 0 18px rgba(255, 215, 0, 0.8);
+      position: relative;
+    }
+
+    /* アンティーク風彫刻レリーフ ＋ レインボー箔押し外枠 */
+    .rarity-star3::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      padding: 7px;
+      background: 
+        linear-gradient(45deg, #ffd700, #ff007f, #00f0ff, #00ff88, #ffd700, #a855f7),
+        repeating-linear-gradient(45deg, #bf953f 0px, #fcf6ba 3px, #b38728 6px, #aa771c 9px);
+      background-blend-mode: overlay;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 10;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.9), 0 0 15px rgba(0, 240, 255, 0.7);
+    }
+
+    /* フルアート背景（極光・オーロラグラデーション） */
+    .rarity-star3 .full-art-bg {
+      display: block;
+      opacity: 0.92;
+      top: 7px; left: 7px;
+      width: calc(100% - 14px);
+      height: calc(100% - 14px);
+      border-radius: 12px;
+      background-color: #0b0718;
+      background-image: 
+        radial-gradient(ellipse at 20% 20%, rgba(138, 43, 226, 0.7) 0%, transparent 65%),
+        radial-gradient(ellipse at 80% 25%, rgba(0, 255, 127, 0.6) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 80%, rgba(0, 240, 255, 0.7) 0%, transparent 70%),
+        radial-gradient(circle at 10% 90%, rgba(255, 0, 128, 0.5) 0%, transparent 55%);
+      background-blend-mode: screen;
+    }
+
+    .rarity-star3 .card-art-frame { display: none; }
+
+    /* 稲妻放電・金透かし線画・高密度グリッター粒子 */
+    .rarity-star3 .card-overlay {
+      background-image: 
+        /* 鋭い雷光（青紫の稲妻） */
+        linear-gradient(115deg, transparent 38%, rgba(0, 240, 255, 0.85) 40%, rgba(186, 85, 211, 0.95) 41.5%, transparent 43%),
+        linear-gradient(65deg, transparent 18%, rgba(138, 43, 226, 0.85) 20%, rgba(0, 240, 255, 0.95) 21.5%, transparent 23%),
+        radial-gradient(circle at 35% 30%, rgba(0, 240, 255, 0.8) 0%, rgba(138, 43, 226, 0.4) 18%, transparent 40%),
+        
+        /* 金色の透かし（アザーアート龍・レックウザ風モチーフ線画） */
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' opacity='0.38'><path d='M25,120 Q45,35 110,45 T165,105 Q125,175 55,155 Z M65,65 L110,35 M85,95 L145,75' stroke='%23ffd700' stroke-width='2.5' fill='none'/><path d='M35,85 Q75,15 135,35 Q175,85 125,145' stroke='%23fcf6ba' stroke-width='1.2' fill='none'/><circle cx='80' cy='60' r='12' stroke='%23ffd700' stroke-width='1' fill='none'/></svg>"),
+
+        /* 高密度グリッター・ホロ粒子 */
+        radial-gradient(2px 2px at 25px 35px, #ffffff, transparent),
+        radial-gradient(3px 3px at 65px 85px, #00f0ff, transparent),
+        radial-gradient(2px 2px at 115px 25px, #00ff88, transparent),
+        radial-gradient(3px 3px at 155px 95px, #a855f7, transparent),
+        radial-gradient(2px 2px at 195px 55px, #ffd700, transparent),
+        radial-gradient(3px 3px at 235px 115px, #ff007f, transparent),
+        radial-gradient(2px 2px at 275px 35px, #00f0ff, transparent),
+
+        radial-gradient(3px 3px at 35px 215px, #ffd700, transparent),
+        radial-gradient(2px 2px at 85px 255px, #00ff88, transparent),
+        radial-gradient(3px 3px at 145px 205px, #ff007f, transparent),
+        radial-gradient(2px 2px at 205px 245px, #00f0ff, transparent),
+        radial-gradient(3px 3px at 265px 195px, #a855f7, transparent),
+
+        radial-gradient(2px 2px at 45px 345px, #ffffff, transparent),
+        radial-gradient(3px 3px at 105px 385px, #00f0ff, transparent),
+        radial-gradient(2px 2px at 175px 335px, #ffd700, transparent),
+        radial-gradient(3px 3px at 225px 395px, #ff007f, transparent),
+        radial-gradient(2px 2px at 285px 355px, #00ff88, transparent);
+
+      background-position: left 0 top 0, left 0 top 0, left 0 top 0, left 5px top 25px, center;
+      background-repeat: no-repeat;
+      background-size: 100% 100%, 100% 100%, 100% 100%, 190px 190px, cover;
+      opacity: 0.95;
+    }
+
+    /* ダークグラデーション＋透けホログラフィック技ボックス */
+    .rarity-star3 .move-block {
+      background: linear-gradient(135deg, rgba(15, 10, 30, 0.82) 0%, rgba(5, 20, 35, 0.82) 100%);
+      border: 1px solid rgba(0, 240, 255, 0.6);
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.5), inset 0 0 12px rgba(0, 240, 255, 0.3);
+      backdrop-filter: blur(5px);
+    }
+
+    .rarity-star3 .card-inner { background: transparent; padding: 16px 18px; }
+
+    .rarity-star3 .card-name {
+      color: #e0ffff;
+      text-shadow: 0 0 10px #00f0ff, 0 0 20px #8a2be2, 0 2px 5px #000;
+    }
+    .rarity-star3 .card-name::before { content: '⚡ '; font-size: 15px; color: #00f0ff; }
+    .rarity-star3 .card-name::after { content: ' ⚡'; font-size: 15px; color: #00f0ff; }
+
+    .rarity-star3 .card-hp-group {
+      color: #00f0ff;
+      text-shadow: 0 0 10px #00f0ff, 0 0 15px #8a2be2;
+    }
+
+    /* 右下SR刻印 & 輝くダイアモンドアイコン */
+    .rarity-star3 .rarity-symbol {
+      color: #ffd700;
+      font-weight: 900;
+      text-shadow: 0 0 8px #ffd700, 0 0 12px #00f0ff;
     }
 
     /* =========================================
@@ -462,9 +511,9 @@
           <span class="trump-suit" id="disp-suit-br">♠</span>
         </div>
 
-        <!-- フルアート背景 (AR/SR用) -->
+        <!-- フルアート背景 (AR/SR/☆3用) -->
         <div id="disp-full-art" class="full-art-bg"></div>
-        <!-- オーバーレイ (高密度・多色発光粒子) -->
+        <!-- オーバーレイ (光彩・粒子・エフェクト) -->
         <div class="card-overlay"></div>
 
         <div class="card-inner">
@@ -544,6 +593,7 @@
           <option value="normal" selected>◇1〜4 Normal (標準)</option>
           <option value="ar">☆1 Art Rare / AR (フルアート)</option>
           <option value="sr">☆2 Super Rare / SR (豪華金枠＆キラキラ高密度ホロ)</option>
+          <option value="star3">☆3 Secret Rare / SR (オーロラ・稲妻・アンティーク金枠)</option>
         </select>
       </div>
 
@@ -642,7 +692,6 @@
           el.classList.add(data.colorClass);
         });
 
-        // JOKER選択時に自動でRANKもJKに切り替え
         if (e.target.value === 'joker') {
           rankSelect.value = 'JK';
           updateRank('JK');
@@ -677,12 +726,13 @@
       const raritySymbolMap = {
         normal: '◇◇',
         ar: '☆',
-        sr: '☆☆'
+        sr: '☆☆',
+        star3: 'SR 💎'
       };
 
       raritySelect.addEventListener('change', (e) => {
         const val = e.target.value;
-        card.classList.remove('rarity-normal', 'rarity-ar', 'rarity-sr');
+        card.classList.remove('rarity-normal', 'rarity-ar', 'rarity-sr', 'rarity-star3');
         card.classList.add(`rarity-${val}`);
         document.getElementById('disp-rarity').textContent = raritySymbolMap[val];
       });
